@@ -32,3 +32,6 @@ def __getattr__(name: str) -> Color:
 __all__ = ["Color", "__getattr__", "color_range", "random_color", "sort_by_hue", "sort_by_luminosity", "sorting_by"]
 __all__ += ["dynamic_name_lookup", "dynamic_name_lookup_enabled"]
 __all__ += ["base_colors", "pride", "transparent", "w3c", "xkcd"]
+
+__pdoc__ = {}
+__pdoc__['__getattr__'] = False

@@ -2,6 +2,7 @@ from .color import Color
 from .color_list import ColorList
 
 # License: https://creativecommons.org/publicdomain/zero/1.0/
+
 xkcd = ColorList({
     "acidgreen": Color("#8ffe09", name="acidgreen", source="xkcd"),
     "adobe": Color("#bd6c48", name="adobe", source="xkcd"),
@@ -953,4 +954,41 @@ xkcd = ColorList({
     "yellowybrown": Color("#ae8b0c", name="yellowybrown", source="xkcd"),
     "yellowygreen": Color("#bff128", name="yellowygreen", source="xkcd"),
 })
+"""XKCD color survey collection.
 
+A collection of 949 colors based on the XKCD color survey. This dataset contains
+colors with descriptive names that were crowdsourced from the XKCD community,
+providing a rich palette of human-named colors.
+
+The colors in this collection include:
+- Common color names (red, blue, green, etc.)
+- Descriptive color names (baby blue, blood red, etc.)
+- Humorous or colloquial names (barf green, baby poop, etc.)
+- Technical color names (azure, aquamarine, etc.)
+
+This collection is particularly useful for:
+- Natural language color processing
+- User-friendly color selection interfaces
+- Data visualization with human-readable color names
+- Applications requiring descriptive color names
+
+License: Creative Commons Zero 1.0 (Public Domain)
+Source: XKCD Color Survey (https://xkcd.com/color/rgb/)
+
+Example:
+    >>> # get 10 random colors with names vs just random r,g,b values
+    >>> colors = painto.xkcd.random(10)
+    >>> for c in colors:
+    ...     print(c.console_bg(c.name))
+
+![A list of 10 random XKCD colors](../images/xkcd_random.png)
+
+These two statements return the same result. Asking for a color by name will
+look through all color lists and find the first match in order of color list
+priority. 
+
+    >>> bg = painto.xkcd.sunflower  # #FFC512
+    >>> bg = painto.sunflower  # #FFC512
+
+
+"""

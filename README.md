@@ -100,8 +100,14 @@ lighter = blue * 2
 
 ```python
 # Generate gradient between colors
-colors = painto.color_range(Color("red"), Color("blue"), 10)  # 10 steps
+colors = painto.color_range(painto.red, painto.blue, 10)  # 10 steps
+for c in colors:
+    print(c.console_bg(c.hex))
+```
 
+![Red to blue over 10 steps](docs/images/red_blue_steps.png)
+
+```python
 # Inclusive range (includes end color)
 colors = painto.color_range(Color("red"), Color("blue"), 5, inclusive=True)
 ```

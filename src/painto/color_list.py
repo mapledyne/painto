@@ -37,10 +37,12 @@ class ColorList(dict):
             count (int, optional): Number of random colors to return. Defaults to 1.
 
         Returns:
-            Color: If count=1, returns a single Color object.
+            Color: If count==1, returns a single Color object.
             list[Color]: If count>1, returns a list of Color objects.
 
         Raises:
             ValueError: If count is greater than the number of available colors.
         """
+        if count == 1:
+            return random.choice(list(self.values()))
         return random.sample(list(self.values()), count)
