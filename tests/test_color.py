@@ -1,28 +1,29 @@
-import unittest
-import sys
 import os
+import sys
+import unittest
 
 # Add src directory to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 import painto
 
+
 class TestColor(unittest.TestCase):
     """Test cases for the Color class."""
     
-    def setUp(self):
+    def setUp(self) -> None:
         """Set up test fixtures before each test method."""
         self.red = painto.red
         self.blue = painto.blue
         self.green = painto.green
     
-    def test_color_creation_from_name(self):
+    def test_color_creation_from_name(self) -> None:
         """Test creating colors from color names."""
         self.assertIsInstance(self.red, painto.Color)
         self.assertIsInstance(self.blue, painto.Color)
         self.assertIsInstance(self.green, painto.Color)
     
-    def test_color_creation_from_hex(self):
+    def test_color_creation_from_hex(self) -> None:
         """Test creating colors from hex strings."""
         red_hex = painto.Color("#FF0000")
         blue_hex = painto.Color("#0000ff")
@@ -31,30 +32,30 @@ class TestColor(unittest.TestCase):
         self.assertIsInstance(blue_hex, painto.Color)
         self.assertIsInstance(hex_css_short, painto.Color)
     
-    def test_color_creation_from_rgb(self):
+    def test_color_creation_from_rgb(self) -> None:
         """Test creating colors from RGB values."""
         red_rgb = painto.Color(255, 0, 0)
         blue_rgb = painto.Color(0, 0, 255)
         self.assertIsInstance(red_rgb, painto.Color)
         self.assertIsInstance(blue_rgb, painto.Color)
     
-    def test_color_properties(self):
+    def test_color_properties(self) -> None:
         """Test basic color properties."""
         self.assertEqual(self.red.r, 255)
         self.assertEqual(self.red.g, 0)
         self.assertEqual(self.red.b, 0)
         self.assertEqual(self.red.a, 255)
     
-    def test_color_hex_property(self):
+    def test_color_hex_property(self) -> None:
         """Test hex property."""
-        self.assertEqual(self.red.hex, "#ff0000")
-        self.assertEqual(self.blue.hex, "#0000ff")
+        self.assertEqual(self.red.hex, "#FF0000")
+        self.assertEqual(self.blue.hex, "#0000FF")
     
-    def test_transparent_color(self):
+    def test_transparent_color(self) -> None:
         """Test transparent color."""
         self.assertEqual(painto.transparent.a, 0)
     
-    def test_color_arithmetic(self):
+    def test_color_arithmetic(self) -> None:
         """Test color arithmetic operations."""
         purple = self.red + self.blue
         self.assertIsInstance(purple, painto.Color)
@@ -66,21 +67,21 @@ class TestColor(unittest.TestCase):
 class TestColorLists(unittest.TestCase):
     """Test cases for color lists."""
     
-    def test_color_lists_exist(self):
+    def test_color_lists_exist(self) -> None:
         """Test that color lists are accessible."""
         self.assertIsNotNone(painto.w3c)
         self.assertIsNotNone(painto.xkcd)
         self.assertIsNotNone(painto.pride)
         self.assertIsNotNone(painto.base_colors)
 
-    def test_color_list_access(self):
+    def test_color_list_access(self) -> None:
         """Test accessing colors from lists."""
         # Test accessing a known color from w3c
         if "red" in painto.w3c:
             red_from_w3c = painto.w3c["red"]
             self.assertIsInstance(red_from_w3c, painto.Color)
     
-    def test_pride_colors(self):
+    def test_pride_colors(self) -> None:
         """Test pride color list."""
         if "blue" in painto.pride and "red" in painto.pride:
             pride_blue = painto.pride.blue
@@ -92,7 +93,7 @@ class TestColorLists(unittest.TestCase):
 class TestColorFunctions(unittest.TestCase):
     """Test cases for color utility functions."""
     
-    def test_color_range(self):
+    def test_color_range(self) -> None:
         """Test color_range function."""
         red = painto.red
         blue = painto.blue
@@ -104,7 +105,7 @@ class TestColorFunctions(unittest.TestCase):
         self.assertEqual(colors[0], red)
         self.assertNotEqual(colors[-1], blue)
     
-    def test_color_range_inclusive(self):
+    def test_color_range_inclusive(self) -> None:
         """Test color_range with inclusive=True."""
         red = painto.red
         blue = painto.blue

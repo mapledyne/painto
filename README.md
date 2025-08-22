@@ -9,11 +9,11 @@ import painto
 
 # Create colors from names, hex, or RGB values
 red = painto.red
-blue = painto.Color("#0000ff")
+blue = painto.Color("#0000FF")
 green = painto.Color(0, 255, 0)
 
 # Basic color properties
-print(red.hex)        # "#ff0000"
+print(red.hex)        # "#FF0000"
 print(red.rgb)        # (255, 0, 0)
 print(red.hsv)        # (0.0, 1.0, 1.0)
 
@@ -48,11 +48,11 @@ blue = painto.blue
 
 # From specific color spaces:
 
-red = painto.xkcd.red  # XKCD red is #e50000
+red = painto.xkcd.red  # XKCD red is #E50000
 
 # From hex strings
 purple = painto.Color("#800080")
-transparent_red = painto.Color("#ff000080")  # With alpha
+transparent_red = painto.Color("#FF000080")  # With alpha
 
 # From RGB values
 green = painto.Color(0, 255, 0)
@@ -70,17 +70,19 @@ foreground = yellow.foreground  # Will return black, for yellow
 ```
 
 ### Color Properties
+
 ```python
 color = painto.orange
 
 print(color.r, color.g, color.b, color.a)  # 255 165 0 255
-print(color.hex)                            # "#ffa500"
+print(color.hex)                            # "#FFA500"
 print(color.name)                           # "orange"
 print(color.luminosity)                     # 0.696
 print(color.hsv)                            # (0.108, 1.0, 255)
 ```
 
 ### Color Operations
+
 ```python
 red = painto.red
 blue = painto.blue
@@ -95,6 +97,7 @@ lighter = blue * 2
 ```
 
 ### Color Ranges
+
 ```python
 # Generate gradient between colors
 colors = painto.color_range(Color("red"), Color("blue"), 10)  # 10 steps
@@ -104,6 +107,7 @@ colors = painto.color_range(Color("red"), Color("blue"), 5, inclusive=True)
 ```
 
 ### Console Output
+
 ```python
 color = painto.green
 print(f"Here is some {color.console_string("Green text")}")

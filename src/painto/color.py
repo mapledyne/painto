@@ -1,19 +1,7 @@
-import warnings
-from typing import Tuple, Union
 import colorsys
 import random
 from enum import Enum, auto
-
-
-
-try:
-    # Suppress deprecation warnings from external dependencies
-    warnings.filterwarnings("ignore", category=DeprecationWarning, module="pkg_resources")
-    warnings.filterwarnings("ignore", category=DeprecationWarning, module="pygame")
-    import pygame
-    _HAS_PYGAME = True
-except ImportError:
-    _HAS_PYGAME = False
+from typing import Iterator, Tuple, Union
 
 ANSI_RESET = "\033[0m"
 
@@ -44,13 +32,22 @@ class Color(tuple):
         >>> purple = red + blue
         >>> darker_purple = purple / 2
     """
-# region === INITIALIZATION ===
 
-    def __new__(cls, value: Union[str, int, Tuple[int, ...]], g: int = -1, b: int = -1, a: int = 255, name: str = '', source: str = ''):
+    def __new__(cls,
+                value: Union[str, int, Tuple[int, ...]],
+                g: int = -1,
+                b: int = -1,
+                a: int = 255,
+                name: str = '',
+                source: str = ''
+                ) -> 'Color':
         return super().__new__(cls, (value, g, b, a))
 
 
-    def __init__(self, *args, **kwargs):
+# region Dunder functions
+
+
+    def __init__(self, *args:int, **kwargs:str) -> None:
         """
         Initialize a Color instance.
 
@@ -78,8 +75,9 @@ class Color(tuple):
                 r, g, b, a = value
             else:
                 raise ValueError("Single argument must be a color name, hex string, or RGB(A) tuple")
-        elif len(args) in {3, 4}:  # Handle r,g,b[,a] values
-            r, g, b, a = args if len(args) == 4 else (*args, 255)
+        elif len(args) in {3, 4}:
+            r, g, b = args[0:3]
+            a = args[3] if len(args) == 4 else 255
         else:
             raise ValueError("Invalid arguments. Must be a color name, hex string, RGB(A) tuple, or 3-4 RGB(A) values")
 
@@ -95,16 +93,15 @@ class Color(tuple):
         if "escape" in kwargs:
             self._escape = kwargs['escape']
 
-# endregion
-# region === DUNDER FUNCTIONS ===
-
     def __repr__(self) -> str:
         return f"Color(r={self.r}, g={self.g}, b={self.b}, a={self.a})"
 
     def __str__(self) -> str:
         return self.name
 
-    def __add__(self, other) -> 'Color':
+    # So many "no type hint checks" messages since a subclass of tuble
+    # won't let us use types for these overrides.
+    def __add__(self, other) -> 'Color':  # type: ignore # noqa: ANN001
         """Blend two colors by averaging their RGBA values."""
         if not isinstance(other, Color):
             raise TypeError("Can only add another Color instance.")
@@ -114,7 +111,7 @@ class Color(tuple):
         a = (self.a + other.a) // 2
         return Color(r, g, b, a)
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other) -> bool:  # type: ignore # noqa: ANN001 
         """Compare two colors for equality."""
         if isinstance(other, Color):
             return self.rgba == other.rgba
@@ -131,10 +128,10 @@ class Color(tuple):
                 return False
         return NotImplemented
 
-    def __ne__(self, other) -> bool:
+    def __ne__(self, other) -> bool:  # type: ignore # noqa: ANN001 
         return not self.__eq__(other)
 
-    def __mul__(self, other) -> 'Color':
+    def __mul__(self, other) -> 'Color':  # type: ignore # noqa: ANN001 
         """Multiply the color by a factor (will lighten/darken the color)."""
         if isinstance(other, (int, float)):
 
@@ -146,39 +143,51 @@ class Color(tuple):
 
         return NotImplemented
 
-    def __rmul__(self, other) -> 'Color':
-        return self * other
+    def __rmul__(self, other) -> 'Color':  # type: ignore # noqa: ANN001 
+        if isinstance(other, (int, float)):
+            return self * other
+        return NotImplemented
 
-    def __truediv__(self, factor) -> 'Color':
-        return self * (1 / factor)
+    def __truediv__(self, other) -> 'Color':  # type: ignore # noqa: ANN001 
+        if isinstance(other, (int, float)):
+            return self * (1 / other)
+        return NotImplemented
 
     def __hash__(self) -> int:
         return hash(self.rgba)
 
     # Compare colors by brightness
-    def __lt__(self, other: 'Color') -> bool:
-        if SORT_BY == ColorSort.HUE:
-            return self.h < other.h
-        if SORT_BY == ColorSort.LUMINOSITY:
-            return self.luminosity < other.luminosity
+    def __lt__(self, other) -> bool:  # type: ignore # noqa: ANN001 
+        if isinstance(other, Color):
+            if SORT_BY == ColorSort.HUE:
+                return self.h < other.h
+            if SORT_BY == ColorSort.LUMINOSITY:
+                return self.luminosity < other.luminosity
+        return NotImplemented
 
-    def __le__(self, other: 'Color') -> bool:
-        if SORT_BY == ColorSort.HUE:
-            return self.h <= other.h
-        if SORT_BY == ColorSort.LUMINOSITY:
-            return self.luminosity <= other.luminosity
+    def __le__(self, other) -> bool:  # type: ignore # noqa: ANN001 
+        if isinstance(other, Color):
+            if SORT_BY == ColorSort.HUE:
+                return self.h <= other.h
+            if SORT_BY == ColorSort.LUMINOSITY:
+                return self.luminosity <= other.luminosity
+        return NotImplemented
 
-    def __gt__(self, other: 'Color') -> bool:
-        if SORT_BY == ColorSort.HUE:
-            return self.h > other.h
-        if SORT_BY == ColorSort.LUMINOSITY:
-            return self.luminosity > other.luminosity
+    def __gt__(self, other) -> bool:  # type: ignore # noqa: ANN001 
+        if isinstance(other, Color):
+            if SORT_BY == ColorSort.HUE:
+                return self.h > other.h
+            if SORT_BY == ColorSort.LUMINOSITY:
+                return self.luminosity > other.luminosity
+        return NotImplemented
 
-    def __ge__(self, other: 'Color') -> bool:
-        if SORT_BY == ColorSort.HUE:
-            return self.h >= other.h
-        if SORT_BY == ColorSort.LUMINOSITY:
-            return self.luminosity >= other.luminosity
+    def __ge__(self, other) -> bool:  # type: ignore # noqa: ANN001 
+        if isinstance(other, Color):
+            if SORT_BY == ColorSort.HUE:
+                return self.h >= other.h
+            if SORT_BY == ColorSort.LUMINOSITY:
+                return self.luminosity >= other.luminosity
+        return NotImplemented
 
     def __neg__(self) -> 'Color':
         return self.difference(Color(255, 255, 255))
@@ -191,7 +200,18 @@ class Color(tuple):
             return 3
         return 4
 
-    def __getitem__(self, index: int) -> int:
+    def __getitem__(self, index: Union[int, slice]) -> Union[int, Tuple[int, ...]]:  # type: ignore
+        if isinstance(index, slice):
+            start = index.start or 0
+            stop = index.stop or len(self)
+            step = index.step or 1
+            return tuple(self[i] for i in range(start, stop, step))  # type: ignore
+
+        if not isinstance(index, int):
+            raise TypeError("indices must be integers or slices")  # type: ignore
+        if index < 0:
+            index += len(self)
+            
         if index == 0:
             return self.r
         elif index == 1:
@@ -203,18 +223,10 @@ class Color(tuple):
 
         raise IndexError("index out of range")
 
-    def __setitem__(self, index: int, value: int):
-        if index == 0:
-            self.r = value
-        elif index == 1:
-            self.g = value
-        elif index == 2:
-            self.b = value
-        elif index == 3:
-            self.a = value
-        raise IndexError("index out of range")
+    def __setitem__(self, index: int, value: int) -> None:
+        raise NotImplementedError("Color is immutable")
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[int]:
         if self.a == 255:
             return iter(self.rgb)
         return iter(self.rgba)
@@ -222,8 +234,9 @@ class Color(tuple):
     def __int__(self) -> int:
         return (self.r << 16) + (self.g << 8) + self.b
 
-# endregion
-# region === PUBLIC PROPERTIES ===
+# endregion Dunder functions
+
+# region Public properties
 
     @property
     def rgba(self) -> Tuple[int, int, int, int]:
@@ -249,6 +262,12 @@ class Color(tuple):
     @property
     def rgb(self) -> Tuple[int, int, int]:
         return self.r, self.g, self.b
+
+    @property
+    def hls(self) -> Tuple[float, float, float]:
+        if not hasattr(self, "_hls"):
+            self._hls = colorsys.rgb_to_hls(*self.rgb)
+        return self._hls
 
     @property
     def hsv(self) -> Tuple[float, float, float]:
@@ -285,12 +304,16 @@ class Color(tuple):
     def hex(self) -> str:
         """Return the color as a hex string."""
         if not hasattr(self, "_hex"):
-            self._hex = f"#{self.r:02x}{self.g:02x}{self.b:02x}" + (f"{self.a:02x}" if self.a != 255 else "")
+            self._hex = f"#{self.r:02X}{self.g:02X}{self.b:02X}" + (f"{self.a:02X}" if self.a != 255 else "")
         return self._hex
 
     @property
     def name(self) -> str:
         """Return the friendly name if it exists, otherwise the hex value."""
+        if hasattr(self, "_name"):
+            if self._name.startswith("#") and DYNAMIC_NAME_LOOKUP:
+                delattr(self, "_name")
+
         if not hasattr(self, "_name"):
             if self.a == 0:
                 self._name = "transparent"
@@ -334,45 +357,114 @@ class Color(tuple):
         return self._foreground
 
     @property
-    def console(self) -> str:
+    def ansi_escape(self) -> str:
+        """Gets the ANSI escape sequence for setting text color.
+
+        Returns:
+            str: ANSI escape sequence that sets text foreground color to this color.
+
+        Example:
+            >>> red = Color("red")
+            >>> print(f"{red.ansi_escape}This text is red{red.ansi_reset}")
+        
+        This can be combined with ansi_escape_bg to set a background color and text color.
+
+        Example:
+            >>> red = Color("red")
+            >>> black = Color("black")
+            >>> print(f"{red.ansi_escape_bg}{black.ansi_escape}A red background with black text{red.ansi_reset}")
+        """
         if not hasattr(self, "_console"):
             self._console = f"\033[38;2;{self.r};{self.g};{self.b}m"
         return self._console
     
     @property
-    def console_bg(self) -> str:
+    def ansi_escape_bg(self) -> str:
+        """Gets the ANSI escape sequence for setting background color to this color.
+
+        Returns:
+            str: ANSI escape sequence that sets background color to this color.
+
+        Example:
+            >>> red = Color("red")
+            >>> print(f"{red.ansi_escape_bg}This text has a red background{red.ansi_reset}")
+
+        This can be combined with ansi_escape to set a background color and text color.
+
+        Example:
+            >>> red = Color("red")
+            >>> black = Color("black")
+            >>> print(f"{red.ansi_escape_bg}{black.ansi_escape}A red background with black text{red.ansi_reset}")
+
+        """
         if not hasattr(self, "_console_bg"):
             self._console_bg = f"\033[48;2;{self.r};{self.g};{self.b}m"
         return self._console_bg
 
+    @property
+    def ansi_reset(self) -> str:
+        """Gets the ANSI escape sequence to reset colors.
+        This is the same for all colors, so it's just a convenient alias. Without putting
+        this in your console output the colors will persist until the next color change
+        onto future lines.
 
-# endregion
-# region === PUBLIC FUNCTIONS ====
-    def to_pygame(self):
-        if not _HAS_PYGAME:
-            raise ImportError("pygame is required to use to_pygame()")
-        return pygame.Color(*self.rgba)
+        Returns:
+            str: ANSI escape sequence that resets all colors to default.
+
+        Example:
+            >>> red = Color("red")
+            >>> print(f"{red.ansi_escape_bg}This text has a red background{red.ansi_reset}")
+
+        """
+        return ANSI_RESET
+
+# endregion Public properties
+
+# region Public functions
+
     
-    def console_string(self, text: str):
-        fg_color = self.console
-        return f"{fg_color}{text}{ANSI_RESET}"
+    def console(self, text: str, background: 'Color' = None) -> str:
+        """Wraps text with ANSI escape sequences to display it in this color as the foreground/text color.
+        This function also wraps the text with the reset to put the colors back to normal after the text.
+
+        Args:
+            text: The text to colorize.
+            background: The background color to use. If not provided, the background will be left
+            as the default console background color.
+
+        Returns:
+            str: The text wrapped with ANSI escape sequences to display in this color.
+
+        Example:
+            >>> red = Color("red")
+            >>> print(red.console("This text is red"))
+        """
+        fg_color = self.ansi_escape
+        if background is None:
+            return f"{fg_color}{text}{ANSI_RESET}"
+        else:
+            bg_color = background.ansi_escape_bg
+            return f"{bg_color}{fg_color}{text}{ANSI_RESET}"
     
-    def console_string_bg(self, text: str):
-        bg_color = self.console_bg
-        fg_color = self.foreground.console
+    def console_bg(self, text: str) -> str:
+        """Wraps text with ANSI escape sequences to display it with this background color.
+
+        The text color will be automatically set to either black or white depending on
+        the background color's luminosity for best contrast.
+
+        Args:
+            text: The text to display on the colored background.
+
+        Returns:
+            str: The text wrapped with ANSI escape sequences for background and foreground colors.
+
+        Example:
+            >>> red = Color("red") 
+            >>> print(red.console_bg("This text has a red background"))
+        """
+        bg_color = self.ansi_escape_bg
+        fg_color = self.foreground.ansi_escape
         return f"{bg_color}{fg_color}{text}{ANSI_RESET}"
-
-    # convenient aliases, but not really required.
-    def lighten(self, factor: float = 1.2) -> 'Color':
-        """Lighten the color."""
-        return self * factor
-
-    def darken(self, factor: float = 0.8) -> 'Color':
-        """Darken the color."""
-        return self * factor
-
-    def semi_transparent(self, alpha: int = 128) -> 'Color':
-        return Color((self.r, self.g, self.b, alpha))
 
     def difference(self, other: 'Color') -> 'Color':
         return Color(
@@ -383,7 +475,7 @@ class Color(tuple):
     
 
 # endregion
-# region Internal functions
+# region Internal functions 
 
 # endregion Internal functions
 
@@ -404,35 +496,6 @@ def _redistribute_rgb(r: float, g: float, b: float) -> Color:
     x = (3 * threshold - total) / (3 * m - total)
     gray = threshold - x * m
     return Color(int(gray + x * r), int(gray + x * g), int(gray + x * b))
-
-
-# endregion Private functions
-
-
-# region Public static functions
-
-
-def name_lookup(color_to_name: Color) -> str:
-    # Return a list of colors used this session
-
-    # late import so we don't try unless we're actually going to use it.
-    try:
-        import requests
-    except ImportError:
-        raise ImportError("requests is required to use name_lookup()")
-
-    url = "https://api.color.pizza/v1/"
-
-    hex_color = f"{color_to_name.r:02X}{color_to_name.g:02X}{color_to_name.b:02X}"
-    response = requests.get(f"{url}?values={hex_color}", timeout=5)
-    if response.status_code == 200:
-        api_data = response.json()
-        suggested_name = api_data["colors"][0]["name"] if api_data["colors"] else "Unknown"
-    else:
-        suggested_name = "unknown"
-
-    return suggested_name
-
 
 def _rgba_from_name(color_name: str) -> tuple[int, ...]:
     """Retrieve a color by its human-readable name."""
@@ -470,12 +533,74 @@ def _rgba_from_hex(hex_str: str) -> Tuple[int, int, int, int]:
         return r, g, b, 255
     raise ValueError("Invalid hex string. Must be in the format #RRGGBB or #RRGGBBAA. CSS Short also supported (#aaa)")
 
+
+# endregion Private functions
+
+
+# region Public static functions
+
+def name_lookup(color_to_name: Color) -> str:
+    """Looks up a human-readable name for a Color using the color.pizza API.
+
+    Makes a request to the color.pizza API to find the closest named color match
+    for the given RGB values.
+
+    Args:
+        color_to_name: The Color object to find a name for
+
+    Returns:
+        str: The suggested name for the color from the API, or "unknown" if the 
+            API request fails
+
+    Example:
+        >>> new_color = painto.random_color()
+        >>> print(painto.name_lookup(new_color))
+
+    Raises:
+        ImportError: If the requests library is not installed
+    """
+    # late import so we don't try unless we're actually going to use it.
+    try:
+        import requests
+    except ImportError:
+        raise ImportError("requests is required to use name_lookup()")
+
+    url = "https://api.color.pizza/v1/"
+
+    hex_color = f"{color_to_name.r:02X}{color_to_name.g:02X}{color_to_name.b:02X}"
+    response = requests.get(f"{url}?values={hex_color}", timeout=5)
+    if response.status_code == 200:
+        api_data = response.json()
+        suggested_name = api_data["colors"][0]["name"] if api_data["colors"] else "Unknown"
+    else:
+        suggested_name = "unknown"
+
+    return suggested_name
+
+
+
 def random_color(count: int = 1) -> Color | list[Color]:
+    """Generates random color(s) with RGB values between 0-255.
+
+    Args:
+        count (int, optional): Number of random colors to generate. Defaults to 1.
+
+    Returns:
+        Color: If count=1, returns a single random Color object.
+        list[Color]: If count>1, returns a list of random Color objects.
+
+    Example:
+        >>> color = painto.random_color()  # Get a single random color
+        >>> colors = painto.random_color(5)  # Get 5 random colors
+    
+    If you're wanting a random color or colors from a specific color list,
+    see ```ColorList.random()```.
+    """
     if count == 1:
         return Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
     return [Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)) for _ in range(count)]
 
-def color_range(start: Color, end: Color, steps: int = 10, inclusive: bool = False) -> list[Color]:
+def color_range(start: Color, end: Color, steps: int = 10, inclusive: bool = False) -> Iterator[Color]:
     if steps < 0:
         raise ValueError("steps must be greater than 0")
     if inclusive:
@@ -491,27 +616,81 @@ def color_range(start: Color, end: Color, steps: int = 10, inclusive: bool = Fal
         s = start.s + i * s_step
         a = start.a + i * alpha_step
         r, g, b = colorsys.hsv_to_rgb(h, s, v)
-        yield Color(r, g, b, a)
+        yield Color(int(r), int(g), int(b), int(a))
 
     if inclusive:
         yield end
 
-def sort_by_hue():
+def sort_by_hue() -> None:
+    """Sets the global color sorting method to sort by hue.
+    
+    This function changes the global sorting option to sort colors by their hue
+    (rainbow) order. The default is to sort by luminosity/brightness. To change
+    back to sorting by luminosity, call ```sort_by_luminosity()```.
+    
+    Returns:
+        None
+    """
     global SORT_BY
     SORT_BY = ColorSort.HUE
 
-def sort_by_luminosity():
-    global SORT_BY
+def sort_by_luminosity() -> None:
+    """Sets the global color sorting method to sort by luminosity/brightness.
+    
+    This function changes the global sorting option to sort colors by their
+    luminosity value. This is the default sorting method.
+
+    You can change to sort by hue (rainbow) by calling ```sort_by_hue()```.
+    
+    Returns:
+        None
+    """
+    global SORT_BY 
     SORT_BY = ColorSort.LUMINOSITY
 
 def sorting_by() -> str:
+    """Gets the current global color sorting method.
+    
+    Returns:
+        str: The name of the current sorting method ('hue' or 'luminosity')
+    """
     return SORT_BY.name.lower()
 
-def dynamic_name_lookup(lookup: bool = False):
+def dynamic_name_lookup(lookup: bool = False) -> None:
+    """Sets whether dynamic name lookup is enabled.
+
+    When dynamic name lookup is enabled, if a color's name isn't known when
+    using color.name, it will be looked up using the color.pizza API. With this
+    disabled (the default), the name will return as the hex value. This uses
+    the ```name_lookup()``` function and will raise an ImportError if the
+    requests library is not installed.
+
+    Note:
+        Use this with care. It will slow any access to color.name that isn't known
+        and cached.
+
+    Args:
+        lookup (bool, optional): Whether to enable dynamic name lookup. Defaults to False.
+
+    Returns:
+        None
+    
+    Example:
+        >>> new_color = painto.Color("#946A87")
+        >>> print(new_color.name)  # '#946A87'
+        >>> painto.dynamic_name_lookup(True)
+        >>> print(new_color.name)  # 'Fruit of Passion'
+    """
     global DYNAMIC_NAME_LOOKUP
     DYNAMIC_NAME_LOOKUP = lookup
 
 def dynamic_name_lookup_enabled() -> bool:
+    """Returns whether dynamic name lookup is currently enabled. Change this
+    with ```dynamic_name_lookup()```.
+
+    Returns:
+        bool: True if dynamic name lookup is enabled, False otherwise.
+    """
     return DYNAMIC_NAME_LOOKUP
 
 # endregion public static functions

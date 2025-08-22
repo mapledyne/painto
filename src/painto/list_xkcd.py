@@ -1,7 +1,6 @@
 from .color import Color
 from .color_list import ColorList
 
-
 # License: https://creativecommons.org/publicdomain/zero/1.0/
 xkcd = ColorList({
     "acidgreen": Color("#8ffe09", name="acidgreen", source="xkcd"),

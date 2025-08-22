@@ -29,6 +29,6 @@ def __getattr__(name: str) -> Color:
     raise AttributeError(f"Color '{name}' not found in predefined w3c/CSS colors.")
 
 
-__all__ = ["Color", "__getattr__", "sort_by_hue", "sort_by_luminosity", "sorting_by", "random_color", "color_range"]
+__all__ = ["Color", "__getattr__", "color_range", "random_color", "sort_by_hue", "sort_by_luminosity", "sorting_by"]
 __all__ += ["dynamic_name_lookup", "dynamic_name_lookup_enabled"]
-__all__ += ["xkcd", "pride", "base_colors", "w3c", "transparent"]
+__all__ += ["base_colors", "pride", "transparent", "w3c", "xkcd"]
