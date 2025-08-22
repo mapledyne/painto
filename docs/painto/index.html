@@ -48,6 +48,10 @@ el.replaceWith(d);
 <dd>
 <div class="desc"></div>
 </dd>
+<dt><code class="name"><a title="painto.exceptions" href="exceptions.html">painto.exceptions</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
 <dt><code class="name"><a title="painto.list_base" href="list_base.html">painto.list_base</a></code></dt>
 <dd>
 <div class="desc"></div>
@@ -72,16 +76,20 @@ el.replaceWith(d);
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="painto.color_range"><code class="name flex">
-<span>def <span class="ident">color_range</span></span>(<span>start: <a title="painto.color.Color" href="color.html#painto.color.Color">Color</a>,<br>end: <a title="painto.color.Color" href="color.html#painto.color.Color">Color</a>,<br>steps: int = 10,<br>inclusive: bool = False) ‑> Iterator[<a title="painto.color.Color" href="color.html#painto.color.Color">Color</a>]</span>
+<span>def <span class="ident">color_range</span></span>(<span>start: <a title="painto.color.Color" href="color.html#painto.color.Color">Color</a>,<br>end: <a title="painto.color.Color" href="color.html#painto.color.Color">Color</a>,<br>steps: int = 10,<br>*,<br>inclusive: bool = False) ‑> Iterator[<a title="painto.color.Color" href="color.html#painto.color.Color">Color</a>]</span>
 </code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def color_range(start: Color, end: Color, steps: int = 10, inclusive: bool = False) -&gt; Iterator[Color]:
+<pre><code class="python">def color_range(start: Color,
+                end: Color,
+                steps: int = 10,
+                *,
+                inclusive: bool = False) -&gt; Iterator[Color]:
     if steps &lt; 0:
-        raise ValueError(&#34;steps must be greater than 0&#34;)
+        raise ColorRangeError(steps)
     if inclusive:
         steps -= 1
     h_step = (end.h - start.h) / steps
@@ -128,7 +136,7 @@ el.replaceWith(d);
 
     Returns:
         None
-    
+
     Example:
         &gt;&gt;&gt; new_color = painto.Color(&#34;#946A87&#34;)
         &gt;&gt;&gt; print(new_color.name)  # &#39;#946A87&#39;
@@ -207,13 +215,17 @@ with <code>dynamic_name_lookup()</code>.</p>
     Example:
         &gt;&gt;&gt; color = painto.random_color()  # Get a single random color
         &gt;&gt;&gt; colors = painto.random_color(5)  # Get 5 random colors
-    
+
     If you&#39;re wanting a random color or colors from a specific color list,
     see ```ColorList.random()```.
     &#34;&#34;&#34;
     if count == 1:
-        return Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-    return [Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)) for _ in range(count)]</code></pre>
+        return Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))  # noqa: S311
+
+    colors = []
+    for _ in range(count):
+        colors.append(Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))  # noqa: S311
+    return colors</code></pre>
 </details>
 <div class="desc"><p>Generates random color(s) with RGB values between 0-255.</p>
 <h2 id="args">Args</h2>
@@ -245,11 +257,11 @@ see <code>ColorList.random()</code>.</p></div>
 </summary>
 <pre><code class="python">def sort_by_hue() -&gt; None:
     &#34;&#34;&#34;Sets the global color sorting method to sort by hue.
-    
+
     This function changes the global sorting option to sort colors by their hue
     (rainbow) order. The default is to sort by luminosity/brightness. To change
     back to sorting by luminosity, call ```sort_by_luminosity()```.
-    
+
     Returns:
         None
     &#34;&#34;&#34;
@@ -273,16 +285,16 @@ back to sorting by luminosity, call <code>sort_by_luminosity()</code>.</p>
 </summary>
 <pre><code class="python">def sort_by_luminosity() -&gt; None:
     &#34;&#34;&#34;Sets the global color sorting method to sort by luminosity/brightness.
-    
+
     This function changes the global sorting option to sort colors by their
     luminosity value. This is the default sorting method.
 
     You can change to sort by hue (rainbow) by calling ```sort_by_hue()```.
-    
+
     Returns:
         None
     &#34;&#34;&#34;
-    global SORT_BY 
+    global SORT_BY
     SORT_BY = ColorSort.LUMINOSITY</code></pre>
 </details>
 <div class="desc"><p>Sets the global color sorting method to sort by luminosity/brightness.</p>
@@ -302,7 +314,7 @@ luminosity value. This is the default sorting method.</p>
 </summary>
 <pre><code class="python">def sorting_by() -&gt; str:
     &#34;&#34;&#34;Gets the current global color sorting method.
-    
+
     Returns:
         str: The name of the current sorting method (&#39;hue&#39; or &#39;luminosity&#39;)
     &#34;&#34;&#34;
@@ -351,7 +363,7 @@ luminosity value. This is the default sorting method.</p>
     &#34;&#34;&#34;
 
     def __new__(cls,
-                value: Union[str, int, Tuple[int, ...]],
+                value: str | int | tuple[int, ...],
                 g: int = -1,
                 b: int = -1,
                 a: int = 255,
@@ -373,7 +385,7 @@ luminosity value. This is the default sorting method.</p>
             - Single tuple arg: RGB(A) tuple
             - Three ints: r,g,b values
             - Four ints: r,g,b,a values
-            
+
         Kwargs can include:
             name: Optional name for the color
             source: Optional source identifier
@@ -428,7 +440,7 @@ luminosity value. This is the default sorting method.</p>
         a = (self.a + other.a) // 2
         return Color(r, g, b, a)
 
-    def __eq__(self, other) -&gt; bool:  # type: ignore # noqa: ANN001 
+    def __eq__(self, other) -&gt; bool:  # type: ignore # noqa: ANN001
         &#34;&#34;&#34;Compare two colors for equality.&#34;&#34;&#34;
         if isinstance(other, Color):
             return self.rgba == other.rgba
@@ -439,18 +451,17 @@ luminosity value. This is the default sorting method.</p>
         if isinstance(other, tuple):
             if len(other) == 3:
                 return self.rgba == (other[0], other[1], other[2], 255)
-            elif len(other) == 4:
+            if len(other) == 4:
                 return self.rgba == other
-            else:
-                return False
+            return False
         return NotImplemented
 
-    def __ne__(self, other) -&gt; bool:  # type: ignore # noqa: ANN001 
+    def __ne__(self, other) -&gt; bool:  # type: ignore # noqa: ANN001
         return not self.__eq__(other)
 
-    def __mul__(self, other) -&gt; &#39;Color&#39;:  # type: ignore # noqa: ANN001 
+    def __mul__(self, other) -&gt; &#39;Color&#39;:  # type: ignore # noqa: ANN001
         &#34;&#34;&#34;Multiply the color by a factor (will lighten/darken the color).&#34;&#34;&#34;
-        if isinstance(other, (int, float)):
+        if isinstance(other, int | float):
 
             r = int(self.r * other)
             g = int(self.g * other)
@@ -460,13 +471,13 @@ luminosity value. This is the default sorting method.</p>
 
         return NotImplemented
 
-    def __rmul__(self, other) -&gt; &#39;Color&#39;:  # type: ignore # noqa: ANN001 
-        if isinstance(other, (int, float)):
+    def __rmul__(self, other) -&gt; &#39;Color&#39;:  # type: ignore # noqa: ANN001
+        if isinstance(other, int | float):
             return self * other
         return NotImplemented
 
-    def __truediv__(self, other) -&gt; &#39;Color&#39;:  # type: ignore # noqa: ANN001 
-        if isinstance(other, (int, float)):
+    def __truediv__(self, other) -&gt; &#39;Color&#39;:  # type: ignore # noqa: ANN001
+        if isinstance(other, int | float):
             return self * (1 / other)
         return NotImplemented
 
@@ -474,7 +485,7 @@ luminosity value. This is the default sorting method.</p>
         return hash(self.rgba)
 
     # Compare colors by brightness
-    def __lt__(self, other) -&gt; bool:  # type: ignore # noqa: ANN001 
+    def __lt__(self, other) -&gt; bool:  # type: ignore # noqa: ANN001
         if isinstance(other, Color):
             if SORT_BY == ColorSort.HUE:
                 return self.h &lt; other.h
@@ -482,7 +493,7 @@ luminosity value. This is the default sorting method.</p>
                 return self.luminosity &lt; other.luminosity
         return NotImplemented
 
-    def __le__(self, other) -&gt; bool:  # type: ignore # noqa: ANN001 
+    def __le__(self, other) -&gt; bool:  # type: ignore # noqa: ANN001
         if isinstance(other, Color):
             if SORT_BY == ColorSort.HUE:
                 return self.h &lt;= other.h
@@ -490,7 +501,7 @@ luminosity value. This is the default sorting method.</p>
                 return self.luminosity &lt;= other.luminosity
         return NotImplemented
 
-    def __gt__(self, other) -&gt; bool:  # type: ignore # noqa: ANN001 
+    def __gt__(self, other) -&gt; bool:  # type: ignore # noqa: ANN001
         if isinstance(other, Color):
             if SORT_BY == ColorSort.HUE:
                 return self.h &gt; other.h
@@ -498,7 +509,7 @@ luminosity value. This is the default sorting method.</p>
                 return self.luminosity &gt; other.luminosity
         return NotImplemented
 
-    def __ge__(self, other) -&gt; bool:  # type: ignore # noqa: ANN001 
+    def __ge__(self, other) -&gt; bool:  # type: ignore # noqa: ANN001
         if isinstance(other, Color):
             if SORT_BY == ColorSort.HUE:
                 return self.h &gt;= other.h
@@ -517,28 +528,27 @@ luminosity value. This is the default sorting method.</p>
             return 3
         return 4
 
-    def __getitem__(self, index: Union[int, slice]) -&gt; Union[int, Tuple[int, ...]]:  # type: ignore
+    def __getitem__(self, index: int | slice) -&gt; int | tuple[int, ...]:  # type: ignore
         if isinstance(index, slice):
             start = index.start or 0
             stop = index.stop or len(self)
             step = index.step or 1
             return tuple(self[i] for i in range(start, stop, step))  # type: ignore
 
-        if not isinstance(index, int):
-            raise TypeError(&#34;indices must be integers or slices&#34;)  # type: ignore
+
         if index &lt; 0:
             index += len(self)
-            
+
         if index == 0:
             return self.r
-        elif index == 1:
+        if index == 1:
             return self.g
-        elif index == 2:
+        if index == 2:
             return self.b
-        elif index == 3:
+        if index == 3:
             return self.a
 
-        raise IndexError(&#34;index out of range&#34;)
+        raise IndexError()
 
     def __setitem__(self, index: int, value: int) -&gt; None:
         raise NotImplementedError(&#34;Color is immutable&#34;)
@@ -556,7 +566,7 @@ luminosity value. This is the default sorting method.</p>
 # region Public properties
 
     @property
-    def rgba(self) -&gt; Tuple[int, int, int, int]:
+    def rgba(self) -&gt; tuple[int, int, int, int]:
         return self.r, self.g, self.b, self.a
 
 
@@ -577,17 +587,17 @@ luminosity value. This is the default sorting method.</p>
         return self._a
 
     @property
-    def rgb(self) -&gt; Tuple[int, int, int]:
+    def rgb(self) -&gt; tuple[int, int, int]:
         return self.r, self.g, self.b
 
     @property
-    def hls(self) -&gt; Tuple[float, float, float]:
+    def hls(self) -&gt; tuple[float, float, float]:
         if not hasattr(self, &#34;_hls&#34;):
             self._hls = colorsys.rgb_to_hls(*self.rgb)
         return self._hls
 
     @property
-    def hsv(self) -&gt; Tuple[float, float, float]:
+    def hsv(self) -&gt; tuple[float, float, float]:
         if not hasattr(self, &#34;_hsv&#34;):
             self._hsv = colorsys.rgb_to_hsv(*self.rgb)
         return self._hsv
@@ -595,11 +605,11 @@ luminosity value. This is the default sorting method.</p>
     @property
     def h(self) -&gt; float:
         return self.hsv[0]
-    
+
     @property
     def s(self) -&gt; float:
         return self.hsv[1]
-    
+
     @property
     def v(self) -&gt; float:
         return self.hsv[2]
@@ -609,7 +619,7 @@ luminosity value. This is the default sorting method.</p>
         if not hasattr(self, &#34;_luminosity&#34;):
             self._luminosity = self.grayscale.r / 255
         return self._luminosity
-    
+
     @property
     def grayscale(self) -&gt; &#39;Color&#39;:
         if not hasattr(self, &#34;_grayscale&#34;):
@@ -621,7 +631,10 @@ luminosity value. This is the default sorting method.</p>
     def hex(self) -&gt; str:
         &#34;&#34;&#34;Return the color as a hex string.&#34;&#34;&#34;
         if not hasattr(self, &#34;_hex&#34;):
-            self._hex = f&#34;#{self.r:02X}{self.g:02X}{self.b:02X}&#34; + (f&#34;{self.a:02X}&#34; if self.a != 255 else &#34;&#34;)
+            hex_str = f&#34;#{self.r:02X}{self.g:02X}{self.b:02X}&#34;
+            if self.a != 255:
+                hex_str += f&#34;{self.a:02X}&#34;
+            self._hex = hex_str
         return self._hex
 
     @property
@@ -653,13 +666,13 @@ luminosity value. This is the default sorting method.</p>
                     else:
                         self._name = self.hex
         return self._name
-    
+
     @property
     def source(self) -&gt; str:
         if not hasattr(self, &#34;_source&#34;):
             self._source = &#34;&#34;
         return self._source
-    
+
     @property
     def foreground(self) -&gt; &#39;Color&#39;:
         &#34;&#34;&#34; Presuming self is the background color, return a contrasting
@@ -683,7 +696,7 @@ luminosity value. This is the default sorting method.</p>
         Example:
             &gt;&gt;&gt; red = Color(&#34;red&#34;)
             &gt;&gt;&gt; print(f&#34;{red.ansi_escape}This text is red{red.ansi_reset}&#34;)
-        
+
         This can be combined with ansi_escape_bg to set a background color and text color.
 
         Example:
@@ -694,7 +707,7 @@ luminosity value. This is the default sorting method.</p>
         if not hasattr(self, &#34;_console&#34;):
             self._console = f&#34;\033[38;2;{self.r};{self.g};{self.b}m&#34;
         return self._console
-    
+
     @property
     def ansi_escape_bg(self) -&gt; str:
         &#34;&#34;&#34;Gets the ANSI escape sequence for setting background color to this color.
@@ -739,10 +752,11 @@ luminosity value. This is the default sorting method.</p>
 
 # region Public functions
 
-    
+
     def console(self, text: str, background: &#39;Color&#39; = None) -&gt; str:
-        &#34;&#34;&#34;Wraps text with ANSI escape sequences to display it in this color as the foreground/text color.
-        This function also wraps the text with the reset to put the colors back to normal after the text.
+        &#34;&#34;&#34;Wraps text with ANSI escape sequences to display it in this color as the
+        foreground/text color. This function also wraps the text with the reset to
+        put the colors back to normal after the text.
 
         Args:
             text: The text to colorize.
@@ -759,10 +773,10 @@ luminosity value. This is the default sorting method.</p>
         fg_color = self.ansi_escape
         if background is None:
             return f&#34;{fg_color}{text}{ANSI_RESET}&#34;
-        else:
-            bg_color = background.ansi_escape_bg
-            return f&#34;{bg_color}{fg_color}{text}{ANSI_RESET}&#34;
-    
+
+        bg_color = background.ansi_escape_bg
+        return f&#34;{bg_color}{fg_color}{text}{ANSI_RESET}&#34;
+
     def console_bg(self, text: str) -&gt; str:
         &#34;&#34;&#34;Wraps text with ANSI escape sequences to display it with this background color.
 
@@ -776,7 +790,7 @@ luminosity value. This is the default sorting method.</p>
             str: The text wrapped with ANSI escape sequences for background and foreground colors.
 
         Example:
-            &gt;&gt;&gt; red = Color(&#34;red&#34;) 
+            &gt;&gt;&gt; red = Color(&#34;red&#34;)
             &gt;&gt;&gt; print(red.console_bg(&#34;This text has a red background&#34;))
         &#34;&#34;&#34;
         bg_color = self.ansi_escape_bg
@@ -849,7 +863,7 @@ def ansi_escape(self) -&gt; str:
     Example:
         &gt;&gt;&gt; red = Color(&#34;red&#34;)
         &gt;&gt;&gt; print(f&#34;{red.ansi_escape}This text is red{red.ansi_reset}&#34;)
-    
+
     This can be combined with ansi_escape_bg to set a background color and text color.
 
     Example:
@@ -1045,33 +1059,36 @@ def h(self) -&gt; float:
 def hex(self) -&gt; str:
     &#34;&#34;&#34;Return the color as a hex string.&#34;&#34;&#34;
     if not hasattr(self, &#34;_hex&#34;):
-        self._hex = f&#34;#{self.r:02X}{self.g:02X}{self.b:02X}&#34; + (f&#34;{self.a:02X}&#34; if self.a != 255 else &#34;&#34;)
+        hex_str = f&#34;#{self.r:02X}{self.g:02X}{self.b:02X}&#34;
+        if self.a != 255:
+            hex_str += f&#34;{self.a:02X}&#34;
+        self._hex = hex_str
     return self._hex</code></pre>
 </details>
 <div class="desc"><p>Return the color as a hex string.</p></div>
 </dd>
-<dt id="painto.Color.hls"><code class="name">prop <span class="ident">hls</span> : Tuple[float, float, float]</code></dt>
+<dt id="painto.Color.hls"><code class="name">prop <span class="ident">hls</span> : tuple[float, float, float]</code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def hls(self) -&gt; Tuple[float, float, float]:
+def hls(self) -&gt; tuple[float, float, float]:
     if not hasattr(self, &#34;_hls&#34;):
         self._hls = colorsys.rgb_to_hls(*self.rgb)
     return self._hls</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
-<dt id="painto.Color.hsv"><code class="name">prop <span class="ident">hsv</span> : Tuple[float, float, float]</code></dt>
+<dt id="painto.Color.hsv"><code class="name">prop <span class="ident">hsv</span> : tuple[float, float, float]</code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def hsv(self) -&gt; Tuple[float, float, float]:
+def hsv(self) -&gt; tuple[float, float, float]:
     if not hasattr(self, &#34;_hsv&#34;):
         self._hsv = colorsys.rgb_to_hsv(*self.rgb)
     return self._hsv</code></pre>
@@ -1142,26 +1159,26 @@ def r(self) -&gt; int:
 </details>
 <div class="desc"></div>
 </dd>
-<dt id="painto.Color.rgb"><code class="name">prop <span class="ident">rgb</span> : Tuple[int, int, int]</code></dt>
+<dt id="painto.Color.rgb"><code class="name">prop <span class="ident">rgb</span> : tuple[int, int, int]</code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def rgb(self) -&gt; Tuple[int, int, int]:
+def rgb(self) -&gt; tuple[int, int, int]:
     return self.r, self.g, self.b</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
-<dt id="painto.Color.rgba"><code class="name">prop <span class="ident">rgba</span> : Tuple[int, int, int, int]</code></dt>
+<dt id="painto.Color.rgba"><code class="name">prop <span class="ident">rgba</span> : tuple[int, int, int, int]</code></dt>
 <dd>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
-def rgba(self) -&gt; Tuple[int, int, int, int]:
+def rgba(self) -&gt; tuple[int, int, int, int]:
     return self.r, self.g, self.b, self.a</code></pre>
 </details>
 <div class="desc"></div>
@@ -1216,8 +1233,9 @@ def v(self) -&gt; float:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def console(self, text: str, background: &#39;Color&#39; = None) -&gt; str:
-    &#34;&#34;&#34;Wraps text with ANSI escape sequences to display it in this color as the foreground/text color.
-    This function also wraps the text with the reset to put the colors back to normal after the text.
+    &#34;&#34;&#34;Wraps text with ANSI escape sequences to display it in this color as the
+    foreground/text color. This function also wraps the text with the reset to
+    put the colors back to normal after the text.
 
     Args:
         text: The text to colorize.
@@ -1234,12 +1252,13 @@ def v(self) -&gt; float:
     fg_color = self.ansi_escape
     if background is None:
         return f&#34;{fg_color}{text}{ANSI_RESET}&#34;
-    else:
-        bg_color = background.ansi_escape_bg
-        return f&#34;{bg_color}{fg_color}{text}{ANSI_RESET}&#34;</code></pre>
+
+    bg_color = background.ansi_escape_bg
+    return f&#34;{bg_color}{fg_color}{text}{ANSI_RESET}&#34;</code></pre>
 </details>
-<div class="desc"><p>Wraps text with ANSI escape sequences to display it in this color as the foreground/text color.
-This function also wraps the text with the reset to put the colors back to normal after the text.</p>
+<div class="desc"><p>Wraps text with ANSI escape sequences to display it in this color as the
+foreground/text color. This function also wraps the text with the reset to
+put the colors back to normal after the text.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>text</code></strong></dt>
@@ -1279,7 +1298,7 @@ This function also wraps the text with the reset to put the colors back to norma
         str: The text wrapped with ANSI escape sequences for background and foreground colors.
 
     Example:
-        &gt;&gt;&gt; red = Color(&#34;red&#34;) 
+        &gt;&gt;&gt; red = Color(&#34;red&#34;)
         &gt;&gt;&gt; print(red.console_bg(&#34;This text has a red background&#34;))
     &#34;&#34;&#34;
     bg_color = self.ansi_escape_bg
@@ -1300,7 +1319,7 @@ the background color's luminosity for best contrast.</p>
 <dd>The text wrapped with ANSI escape sequences for background and foreground colors.</dd>
 </dl>
 <h2 id="example">Example</h2>
-<pre><code class="language-python-repl">&gt;&gt;&gt; red = Color(&quot;red&quot;) 
+<pre><code class="language-python-repl">&gt;&gt;&gt; red = Color(&quot;red&quot;)
 &gt;&gt;&gt; print(red.console_bg(&quot;This text has a red background&quot;))
 </code></pre></div>
 </dd>
@@ -1335,6 +1354,7 @@ the background color's luminosity for best contrast.</p>
 <ul>
 <li><code><a title="painto.color" href="color.html">painto.color</a></code></li>
 <li><code><a title="painto.color_list" href="color_list.html">painto.color_list</a></code></li>
+<li><code><a title="painto.exceptions" href="exceptions.html">painto.exceptions</a></code></li>
 <li><code><a title="painto.list_base" href="list_base.html">painto.list_base</a></code></li>
 <li><code><a title="painto.list_pride" href="list_pride.html">painto.list_pride</a></code></li>
 <li><code><a title="painto.list_w3c" href="list_w3c.html">painto.list_w3c</a></code></li>

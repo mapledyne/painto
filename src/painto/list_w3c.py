@@ -132,7 +132,7 @@ w3c = ColorList({
     "pink": Color("#FFC0CB", name="pink", source="w3c"),
     "plum": Color("#DD00DD", name="plum", source="w3c"),
     "postyellow": Color("#FFED00", name="postyellow", source="w3c"),
-    "powderblue": Color("#B0E0E6", name="powderblue", source="w3c"), 
+    "powderblue": Color("#B0E0E6", name="powderblue", source="w3c"),
     "purple": Color("#800080", name="purple", source="w3c"),
     "rebeccapurple": Color("#663399", name="rebeccapurple", source="w3c"),
     "red": Color("#FF0000", name="red", source="w3c"),

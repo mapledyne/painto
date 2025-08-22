@@ -985,7 +985,7 @@ Example:
 
 These two statements return the same result. Asking for a color by name will
 look through all color lists and find the first match in order of color list
-priority. 
+priority.
 
     >>> bg = painto.xkcd.sunflower  # #FFC512
     >>> bg = painto.sunflower  # #FFC512

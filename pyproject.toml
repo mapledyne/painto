@@ -27,8 +27,9 @@ packages = [
 
 
 [tool.ruff]
-line-length = 120
+line-length = 100
 indent-width = 4
+extend-exclude = [".scratch"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -36,14 +37,32 @@ indent-style = "space"
 line-ending = "auto"
 
 [tool.ruff.lint]
+
 select = [
-    "F",   # pyflakes
-    "E",   # pycodestyle
-    "I",   # isort
-    "ANN", # flake8 type annotations
-    "RUF", # ruff-specific rules
+  # default
+  "F",      # flake8 error
+  "E",      # pycodestyle error
+  "I",      # isort imports
+  "ANN", # flake8 type annotations
+  "RUF", # ruff-specific rules
+  # extra
+  "A",      # builtin shadowing
+  "B",      # flake8 bugbear
+  "BLE",    # aboid bare excepts
+  "C4",     # simplify comprehensions
+  "DTZ",    # datetime errors
+  "FBT",    # avoid boolean trap
+  "G",      # logging format
+  "N",      # conform to PEP8 naming rules
+  "RET",    # return values
+  "S",      # bandit
+  "TRY",    # exceptions antipatterns
+  "UP",     # upgade syntax
+  "W",      # pycodestyle warning
+  "YTT",    # wrong usage of sys.info
 ]
 fixable = ["ALL"]
+
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"

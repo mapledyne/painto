@@ -29,7 +29,7 @@ class ColorList(dict):
     def __init__(self, *args: str, **kwargs: str) -> None:
         super().__init__(*args, **kwargs)
         self.__dict__ = self
-    
+
     def random(self, count: int = 1) -> Color | list[Color]:
         """Returns random color(s) from this color list.
 
@@ -44,5 +44,5 @@ class ColorList(dict):
             ValueError: If count is greater than the number of available colors.
         """
         if count == 1:
-            return random.choice(list(self.values()))
+            return random.choice(list(self.values()))  # noqa: S311
         return random.sample(list(self.values()), count)

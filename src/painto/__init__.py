@@ -10,6 +10,7 @@ from .color import (
     sorting_by,
     transparent,
 )
+from .exceptions import ColorNotFoundError
 from .list_base import base_colors
 from .list_pride import pride
 from .list_w3c import w3c
@@ -26,10 +27,11 @@ def __getattr__(name: str) -> Color:
     for color_list in color_lists:
         if name in color_list:
             return color_list[name]
-    raise AttributeError(f"Color '{name}' not found in predefined w3c/CSS colors.")
+    raise AttributeError()
 
 
-__all__ = ["Color", "__getattr__", "color_range", "random_color", "sort_by_hue", "sort_by_luminosity", "sorting_by"]
+__all__ = ["Color", "__getattr__", "color_range", "random_color"]
+__all__ += ["sort_by_hue", "sort_by_luminosity", "sorting_by"]
 __all__ += ["dynamic_name_lookup", "dynamic_name_lookup_enabled"]
 __all__ += ["base_colors", "pride", "transparent", "w3c", "xkcd"]
 

@@ -81,7 +81,7 @@ el.replaceWith(d);
     def __init__(self, *args: str, **kwargs: str) -&gt; None:
         super().__init__(*args, **kwargs)
         self.__dict__ = self
-    
+
     def random(self, count: int = 1) -&gt; Color | list[Color]:
         &#34;&#34;&#34;Returns random color(s) from this color list.
 
@@ -96,7 +96,7 @@ el.replaceWith(d);
             ValueError: If count is greater than the number of available colors.
         &#34;&#34;&#34;
         if count == 1:
-            return random.choice(list(self.values()))
+            return random.choice(list(self.values()))  # noqa: S311
         return random.sample(list(self.values()), count)</code></pre>
 </details>
 <div class="desc"><p>A collection of Color objects to create a named collection (e.g. w3c, xkcd, etc.)</p>
@@ -144,7 +144,7 @@ Color objects. The colors can be accessed both as dictionary items and as attrib
         ValueError: If count is greater than the number of available colors.
     &#34;&#34;&#34;
     if count == 1:
-        return random.choice(list(self.values()))
+        return random.choice(list(self.values()))  # noqa: S311
     return random.sample(list(self.values()), count)</code></pre>
 </details>
 <div class="desc"><p>Returns random color(s) from this color list.</p>
