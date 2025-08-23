@@ -35,21 +35,9 @@ class Color(tuple):
         >>> darker_purple = purple / 2
     """
 
-    def __new__(cls,
-                value: str | int | tuple[int, ...],
-                g: int = -1,
-                b: int = -1,
-                a: int = 255,
-                name: str = '',
-                source: str = ''
-                ) -> 'Color':
-        return super().__new__(cls, (value, g, b, a))
-
-
 # region Dunder functions
 
-
-    def __init__(self, *args:int, **kwargs:str) -> None:
+    def __new__(cls, *args:int, **kwargs:str) -> 'Color':
         """
         Initialize a Color instance.
 
@@ -63,76 +51,109 @@ class Color(tuple):
             name: Optional name for the color
             source: Optional source identifier
         """
+        color_rgb = (0, 0, 0, 255)
         if len(args) == 1:
             value = args[0]
             if isinstance(value, str):
                 if value.startswith("#"):  # Handle hex string
-                    r, g, b, a = _rgba_from_hex(value)
+                    color_rgb = _rgba_from_hex(value)
                 else:  # Handle color name
-                    r, g, b, a = _rgba_from_name(value)
-            elif isinstance(value, tuple) and len(value) == 3:  # Handle RGB tuple
-                r, g, b = value
-                a = 255
-            elif isinstance(value, tuple) and len(value) == 4:  # Handle RGBA tuple
-                r, g, b, a = value
-            else:
+                    color_rgb = _rgba_from_name(value)
+            elif not isinstance(value, tuple) or len(value) not in {3, 4}:
                 raise ValueError("Single argument must be a color name, hex string, or RGB(A) tuple")
+            else:
+                color_rgb = value
         elif len(args) in {3, 4}:
-            r, g, b = args[0:3]
-            a = args[3] if len(args) == 4 else 255
+            for _, arg in enumerate(args):
+                if not isinstance(arg, int | float):
+                    raise ValueError("All arguments must be numbers.")
+            color_rgb = args
         else:
             raise ValueError("Invalid arguments. Must be a color name, hex string, RGB(A) tuple, or 3-4 RGB(A) values")
 
-        self._r = int(r)
-        self._g = int(g)
-        self._b = int(b)
-        self._a = int(a)
+        a = 255
+        if len(color_rgb) == 4:
+            a = color_rgb[3]
+
+        # this makes (1000, 200, 100) turn in to a sensible color
+        color_rgb = _redistribute_rgb(color_rgb[0], color_rgb[1], color_rgb[2], a)
 
         if 'name' in kwargs:
-            self._name = kwargs['name']
+            cls._name = kwargs['name']
         if 'source' in kwargs:
-            self._source = kwargs['source']
+            cls._source = kwargs['source']
         if "escape" in kwargs:
-            self._escape = kwargs['escape']
+            cls._escape = kwargs['escape']
+        if a == 255:
+            return super().__new__(cls, color_rgb[0:3])
+        return super().__new__(cls, (*color_rgb, a))
+
 
     def __repr__(self) -> str:
-        return f"Color(r={self.r}, g={self.g}, b={self.b}, a={self.a})"
+        a = ""
+        if self.a != 255:
+            a = f", a={self.a}"
+        return f"Color(r={self.r}, g={self.g}, b={self.b}{a})"
 
     def __str__(self) -> str:
         return self.name
 
-    # So many "no type hint checks" messages since a subclass of tuble
-    # won't let us use types for these overrides.
-    def __add__(self, other) -> 'Color':  # type: ignore # noqa: ANN001
+    def __add__(self, other: object) -> tuple[int, ...]:
         """Blend two colors by averaging their RGBA values."""
-        if not isinstance(other, Color):
-            raise TypeError("Can only add another Color instance.")
-        r = (self.r + other.r) // 2
-        g = (self.g + other.g) // 2
-        b = (self.b + other.b) // 2
-        a = (self.a + other.a) // 2
-        return Color(r, g, b, a)
+        if isinstance(other, Color):
+            r = (self.r + other.r) // 2
+            g = (self.g + other.g) // 2
+            b = (self.b + other.b) // 2
+            a = (self.a + other.a) // 2
+            return Color(r, g, b, a)
+        if isinstance(other, tuple):
+            if len(other) in {3, 4}:
+                r = (self.r + other[0]) // 2
+                g = (self.g + other[1]) // 2
+                b = (self.b + other[2]) // 2
+                if len(other) == 4:
+                    a = (self.a + other[3]) // 2
+                return r, g, b, a
+            return NotImplemented
+        if isinstance(other, str):
+            try:
+                color_from_name = _rgba_from_name(other)
+            except ColorNotFoundError:
+                return NotImplemented
+            return self + color_from_name
 
-    def __eq__(self, other) -> bool:  # type: ignore # noqa: ANN001
+        return NotImplemented
+
+    def __radd__(self, other: object) -> tuple[int, ...]:
+        return self + other
+
+    def __eq__(self, other: object) -> bool:
         """Compare two colors for equality."""
         if isinstance(other, Color):
             return self.rgba == other.rgba
+
         if isinstance(other, str):
-            if other.lower() in [self.name, self.hex]:
-                return True
-            return False
+            try:
+                if other.startswith("#"):  # Handle hex string
+                    color_from_str = _rgba_from_hex(other)
+                else:  # Handle color name
+                    color_from_str = _rgba_from_name(other)
+            except (ColorNotFoundError, ValueError):
+                return False
+            return self == color_from_str
+
         if isinstance(other, tuple):
             if len(other) == 3:
-                return self.rgba == (other[0], other[1], other[2], 255)
+                return self.rgb == other
             if len(other) == 4:
                 return self.rgba == other
             return False
         return NotImplemented
 
-    def __ne__(self, other) -> bool:  # type: ignore # noqa: ANN001
+    def __ne__(self, other: object) -> bool:
         return not self.__eq__(other)
 
-    def __mul__(self, other) -> 'Color':  # type: ignore # noqa: ANN001
+    def __mul__(self, other: object) -> 'Color':
         """Multiply the color by a factor (will lighten/darken the color)."""
         if isinstance(other, int | float):
 
@@ -140,7 +161,7 @@ class Color(tuple):
             g = int(self.g * other)
             b = int(self.b * other)
 
-            return _redistribute_rgb(r, g, b)
+            return Color(*_redistribute_rgb(r, g, b))
 
         return NotImplemented
 
@@ -155,7 +176,7 @@ class Color(tuple):
         return NotImplemented
 
     def __hash__(self) -> int:
-        return hash(self.rgba)
+        return hash(tuple(self))
 
     # Compare colors by brightness
     def __lt__(self, other) -> bool:  # type: ignore # noqa: ANN001
@@ -196,41 +217,6 @@ class Color(tuple):
     def __bool__(self) -> bool:
         return self.a > 0
 
-    def __len__(self) -> int:
-        if self.a == 255:
-            return 3
-        return 4
-
-    def __getitem__(self, index: int | slice) -> int | tuple[int, ...]:  # type: ignore
-        if isinstance(index, slice):
-            start = index.start or 0
-            stop = index.stop or len(self)
-            step = index.step or 1
-            return tuple(self[i] for i in range(start, stop, step))  # type: ignore
-
-
-        if index < 0:
-            index += len(self)
-
-        if index == 0:
-            return self.r
-        if index == 1:
-            return self.g
-        if index == 2:
-            return self.b
-        if index == 3:
-            return self.a
-
-        raise IndexError()
-
-    def __setitem__(self, index: int, value: int) -> None:
-        raise NotImplementedError("Color is immutable")
-
-    def __iter__(self) -> Iterator[int]:
-        if self.a == 255:
-            return iter(self.rgb)
-        return iter(self.rgba)
-
     def __int__(self) -> int:
         return (self.r << 16) + (self.g << 8) + self.b
 
@@ -242,22 +228,23 @@ class Color(tuple):
     def rgba(self) -> tuple[int, int, int, int]:
         return self.r, self.g, self.b, self.a
 
-
     @property
     def r(self) -> int:
-        return self._r
+        return self[0]
 
     @property
     def g(self) -> int:
-        return self._g
+        return self[1]
 
     @property
     def b(self) -> int:
-        return self._b
+        return self[2]
 
     @property
     def a(self) -> int:
-        return self._a
+        if len(self) == 4:
+            return self[3]
+        return 255
 
     @property
     def rgb(self) -> tuple[int, int, int]:
@@ -477,7 +464,6 @@ class Color(tuple):
             abs(self.b - other.b),
         )
 
-
 # endregion
 # region Internal functions
 
@@ -489,17 +475,19 @@ def _clamp(value: int, min_value: int = 0, max_value: int = 255) -> int:
     return max(min_value, min(max_value, value))
 
 
-def _redistribute_rgb(r: float, g: float, b: float) -> Color:
+def _redistribute_rgb(r: float, g: float, b: float, a: float = 255) -> tuple[int, ...]:
     threshold = 255.999
     m = max(r, g, b)
     if m <= threshold:
-        return Color(int(r), int(g), int(b))
+        return int(r), int(g), int(b)
     total = r + g + b
     if total >= 3 * threshold:
-        return Color(int(threshold), int(threshold), int(threshold))
+        return int(threshold), int(threshold), int(threshold)
     x = (3 * threshold - total) / (3 * m - total)
     gray = threshold - x * m
-    return Color(int(gray + x * r), int(gray + x * g), int(gray + x * b))
+    if a == 255:
+        return int(gray + x * r), int(gray + x * g), int(gray + x * b)
+    return int(gray + x * r), int(gray + x * g), int(gray + x * b), int(a)
 
 def _rgba_from_name(color_name: str) -> tuple[int, ...]:
     """Retrieve a color by its human-readable name."""
@@ -514,12 +502,12 @@ def _rgba_from_name(color_name: str) -> tuple[int, ...]:
     raise ColorNotFoundError(color_name)
 
 
-def _rgba_from_hex(hex_str: str) -> tuple[int, int, int, int]:
+def _rgba_from_hex(hex_str: str) -> tuple[int, ...]:
     """Convert a hex color string to an RGBA tuple."""
     hex_str = hex_str.lstrip("#")
     if len(hex_str) == 6:  # RGB format
         r, g, b = int(hex_str[0:2], 16), int(hex_str[2:4], 16), int(hex_str[4:6], 16)
-        return r, g, b, 255
+        return r, g, b
     if len(hex_str) == 8:  # RGBA format
         r, g, b, a = (
             int(hex_str[0:2], 16),
@@ -534,7 +522,7 @@ def _rgba_from_hex(hex_str: str) -> tuple[int, int, int, int]:
             int(hex_str[1:2] * 2, 16),
             int(hex_str[2:3] * 2, 16),
         )
-        return r, g, b, 255
+        return r, g, b
     raise ValueError()
 
 

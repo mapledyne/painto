@@ -1,4 +1,12 @@
+
+
+# Two of these so list lookups can raise errors like list lookups, and
+# attribute lookups can raise errors like attribute lookups.
 class ColorNotFoundError(LookupError):
+    def __init__(self, color: str) -> None:
+        super().__init__(f"Color not found in any color list: {color}")
+
+class ColorAttributeNotFoundError(AttributeError):
     def __init__(self, color: str) -> None:
         super().__init__(f"Color not found in any color list: {color}")
 

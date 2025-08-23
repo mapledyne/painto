@@ -10,7 +10,7 @@ from .color import (
     sorting_by,
     transparent,
 )
-from .exceptions import ColorNotFoundError
+from .exceptions import ColorAttributeNotFoundError
 from .list_base import base_colors
 from .list_pride import pride
 from .list_w3c import w3c
@@ -27,7 +27,7 @@ def __getattr__(name: str) -> Color:
     for color_list in color_lists:
         if name in color_list:
             return color_list[name]
-    raise AttributeError()
+    raise ColorAttributeNotFoundError(name)
 
 
 __all__ = ["Color", "__getattr__", "color_range", "random_color"]
