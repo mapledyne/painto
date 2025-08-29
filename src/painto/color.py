@@ -3,36 +3,73 @@ import random
 from collections.abc import Iterator
 from enum import Enum, auto
 
-from .exceptions import ColorNotFoundError, ColorRangeError, RequestsRequiredError
+from .exceptions import (
+    ColorNotFoundError,
+    ColorRangeError,
+    InvalidColorArgumentsError,
+    InvalidHexStringError,
+    RequestsRequiredError,
+)
+
+try:
+    from PIL import Image
+except ImportError:
+    Image = None
 
 ANSI_RESET = "\033[0m"
 
 class ColorSort(Enum):
+    """ :meta private: """
     HUE = auto()
     LUMINOSITY = auto()
+
 
 SORT_BY = ColorSort.LUMINOSITY
 DYNAMIC_NAME_LOOKUP = False
 
 class Color(tuple):
-    """A color class that represents RGBA colors and supports various operations.
+    """
+
+    A color class that represents RGBA colors and supports various operations.
 
     The Color class can be initialized from:
-    - Color names (e.g., "red", "blue")
-    - Hex strings (e.g., "#FF0000" or "#FF0000FF")
-    - RGB/RGBA tuples (e.g., (255, 0, 0) or (255, 0, 0, 255))
+
+    * Color names (e.g., "red", "blue", "aquamarine")
+    * Hex strings (e.g., “``#6FC276`` |6Fc276|” or
+      “``#6488EAFF`` |6488EA|” or “``#F00`` |red|”)
+    * RGB/RGBA tuples (e.g., (255, 0, 0) or (255, 0, 0, 128))
 
     Features:
-    - Arithmetic operations (+, *, /) for color blending and brightness adjustment
-    - Comparison operations for sorting by brightness
-    - Properties for accessing components (r, g, b, a, rgb, rgba, hex, name)
-    - Conversion methods for different color formats
 
-    Example:
-        >>> red = Color("red")
-        >>> blue = Color("#0000FF")
+    * Arithmetic operations (+, \\*, /) for color blending and brightness
+      adjustment: see :ref:`changingcolors`
+    * Comparison operations for sorting by
+      :func:`brightness (luminosity) <painto.sort_by_luminosity>` or
+      :func:`rainbow color (hue) <painto.sort_by_hue>`: See :ref:`sortingcolors`
+    * Lots of conversions and color details: See :ref:`colorproperties`
+
+    The full :ref:`Usage Guide <usageguide>` has more comprehensive examples and idea.
+
+    :Example:
+        >>> red = painto.red
+        >>> print(red.hex)
+
+        ``#FF0000`` |red|
+
+        >>> blue = painto.Color("#0000FF")
+        >>> print(blue.hex)
+
+        ``#0000FF`` |blue|
+
         >>> purple = red + blue
+        >>> print(purple.hex)
+
+        ``#7F007F`` |7F007F|
+
         >>> darker_purple = purple / 2
+        >>> print(darker_purple.hex)
+
+        ``#3F003F`` |3F003F|
     """
 
 # region Dunder functions
@@ -60,16 +97,16 @@ class Color(tuple):
                 else:  # Handle color name
                     color_rgb = _rgba_from_name(value)
             elif not isinstance(value, tuple) or len(value) not in {3, 4}:
-                raise ValueError("Single argument must be a color name, hex string, or RGB(A) tuple")
+                raise InvalidColorArgumentsError()
             else:
                 color_rgb = value
         elif len(args) in {3, 4}:
             for _, arg in enumerate(args):
                 if not isinstance(arg, int | float):
-                    raise ValueError("All arguments must be numbers.")
+                    raise InvalidColorArgumentsError()
             color_rgb = args
         else:
-            raise ValueError("Invalid arguments. Must be a color name, hex string, RGB(A) tuple, or 3-4 RGB(A) values")
+            raise InvalidColorArgumentsError()
 
         a = 255
         if len(color_rgb) == 4:
@@ -78,12 +115,6 @@ class Color(tuple):
         # this makes (1000, 200, 100) turn in to a sensible color
         color_rgb = _redistribute_rgb(color_rgb[0], color_rgb[1], color_rgb[2], a)
 
-        if 'name' in kwargs:
-            cls._name = kwargs['name']
-        if 'source' in kwargs:
-            cls._source = kwargs['source']
-        if "escape" in kwargs:
-            cls._escape = kwargs['escape']
         if a == 255:
             return super().__new__(cls, color_rgb[0:3])
         return super().__new__(cls, (*color_rgb, a))
@@ -226,22 +257,78 @@ class Color(tuple):
 
     @property
     def rgba(self) -> tuple[int, int, int, int]:
+        """ Returns the Color object as an RGBA tuple.
+
+        Typically this property shouldn't be needed since Color itself
+        is a tuple and can be used in place of one anywhere an RGB tuple
+        is expected. Use this, then, if you want to be more explicit,
+        or if you want to force the tuple into a len(4) :type:`tuple` - if there
+        is no transparency on a tuple, it becomes a len(3) (RGB only) :type:`tuple`.
+
+        See :attr:`rgb` for the same concept but only returning the RGB typle
+        as a len(3) :type:`tuple`, dropping the alpha information.
+
+        :returns: RGBA values (0-255) for the color values, including alpha.
+
+        :rtype: :type:`tuple[int, int, int int]`
+
+        See also: :attr:`rgb`, :attr:`r`, :attr:`g`, :attr:`b`, :attr:`a`
+
+        """
         return self.r, self.g, self.b, self.a
 
     @property
     def r(self) -> int:
+        """ Returns just the R (red) component of the color. 
+
+        :returns: Red |red| component of the color (0-255)
+        :rtype: :type:`int`
+
+        See also: :attr:`rgb`, :attr:`rgb`, :attr:`g`, :attr:`b`, :attr:`a`
+
+        """
         return self[0]
 
     @property
     def g(self) -> int:
+        """ Returns just the G (green) component of the color.
+
+        :returns: Green |green| component of the color (0-255)
+        :rtype: :type:`int`
+
+        See also: :attr:`rgb`, :attr:`rgb`, :attr:`r`, :attr:`b`, :attr:`a`
+
+        """
         return self[1]
 
     @property
     def b(self) -> int:
+        """ Returns just the B (blue) component of the color.
+
+        :returns: Blue |blue| component of the color (0-255)
+        :rtype: :type:`int`
+
+        See also: :attr:`rgb`, :attr:`rgb`, :attr:`r`, :attr:`g`, :attr:`a`
+
+        """
         return self[2]
 
     @property
     def a(self) -> int:
+        """ Returns just the A (alpha/trasparency) component of the color.
+
+        If a :class:`color` does not have any transparency, the color
+        :type:`tuple` returns without it (125, 10, 45). With this property
+        it returns 255 (for "no alpha") consistent with other RGBA uses when
+        you need an alpha number, even if you're not using transparency
+        in this color.
+
+        :returns: Alpha component of the color (0-255)
+        :rtype: :type:`int`
+        
+        See also: :attr:`rgb`, :attr:`rgb`, :attr:`r`, :attr:`g`, :attr:`b`
+
+        """
         if len(self) == 4:
             return self[3]
         return 255
@@ -289,7 +376,19 @@ class Color(tuple):
 
     @property
     def hex(self) -> str:
-        """Return the color as a hex string."""
+        """Return the color as a hex string. See also :attr:`name`.
+
+        :return: The color as a hex string.
+        :rtype: str
+
+        :Example:
+            >>> choco = painto.milkchocolate
+            >>> print(choco.hex)
+
+            ``#7F4E1E`` |7F4E1E|
+
+
+        """
         if not hasattr(self, "_hex"):
             hex_str = f"#{self.r:02X}{self.g:02X}{self.b:02X}"
             if self.a != 255:
@@ -299,7 +398,28 @@ class Color(tuple):
 
     @property
     def name(self) -> str:
-        """Return the friendly name if it exists, otherwise the hex value."""
+        """Return the friendly name if it exists, otherwise the hex value.
+        See also :attr:`hex`.
+
+        .. |mahogany| image:: ../assets/4A0100.png
+
+        :return:
+            The color as a friendly name or hex string.
+        :rtype:
+            :type:`str`
+
+        :Example:
+
+            >>> color1 = painto.Color("#4a0100")
+            >>> print(color1.name)
+
+            ``mahogany`` |mahogany|
+
+            >>> color2 = painto.Color("#6589E7")
+            >>> print(color2.name)
+
+            ``#6589E7`` |6589E7|
+        """
         if hasattr(self, "_name"):
             if self._name.startswith("#") and DYNAMIC_NAME_LOOKUP:
                 delattr(self, "_name")
@@ -328,6 +448,50 @@ class Color(tuple):
         return self._name
 
     @property
+    def web(self) -> str:
+        """Returns the color as a web color string.
+
+        This returns the color as a string that can be used in HTML, CSS, and other
+        web-based contexts. Specifically, it tries to return the shortest string that
+        can still be used to identify the color. These rules are:
+       
+        - Start with the hex code of the color (``#RRGGBB``)
+        - Use the hex short code (``#RGB``) if it can work for this color. This works if
+          all three values are matching character pairs, e.g. ``#AA2200`` |AA2200| becomes 
+          ``#A20`` |AA2200|, or ``#CC11BB`` |CC11BB| becomes ``#C1B`` |CC11BB|.
+        - If the color has a :attr:`painto.w3c` name, use the name only if it's equal or shorter than
+          the hex code. This can sometimes be shorter than the short hex code (``red``), but
+          without a short code, it will replace the hex code if the name is 7-characters or less.
+
+        :Example:
+            - ``aquamarine`` becomes ``#7FFFD4`` |7FFFD4|
+            - ``#FF0000`` |red| becomes ``red``
+            - ``fuchsia`` becomes ``#F0F`` |FF00FF|
+
+        :returns: The color as a web color string (``#RRGGBB`` or ``name`` or ``#RGB``)
+        :rtype: :type:`str`
+        """
+
+        hex_code = self.hex.lstrip("#")
+        # Check if can be shortened: RRGGBB where RR, GG, BB are pairs of same chars
+        if (
+            len(hex_code) == 6
+            and hex_code[0] == hex_code[1]
+            and hex_code[2] == hex_code[3]
+            and hex_code[4] == hex_code[5]
+        ):
+            hex_code = f"#{hex_code[0]}{hex_code[2]}{hex_code[4]}"
+
+        if "w3c" in color_lists:
+            for key, value in color_lists["w3c"].items():
+                if value == self:
+                    if len(key) <= len(hex_code):
+                        return str(key)
+                    else:
+                        return hex_code
+        return hex_code
+
+    @property
     def source(self) -> str:
         if not hasattr(self, "_source"):
             self._source = ""
@@ -336,8 +500,20 @@ class Color(tuple):
     @property
     def foreground(self) -> 'Color':
         """ Presuming self is the background color, return a contrasting
-        foreground color for text. Will return black or white, whichever is
-        is more visible on the background.
+        foreground :type:`Color` for foregound text. Will return black or white, 
+        whichever is more visible on the background.
+
+        :return:
+            A :type:`Color` object with the foreground color.
+        :rtype:
+            :type:`Color` (either black or white)
+
+        :Example:
+            >>> merlot = painto.merlot
+            >>> print(merlot.foreground)
+            white
+
+
         """
         if not hasattr(self, "_foreground"):
             if self.luminosity > 0.5:
@@ -348,21 +524,35 @@ class Color(tuple):
 
     @property
     def ansi_escape(self) -> str:
-        """Gets the ANSI escape sequence for setting text color.
+        """Gets the ANSI escape sequence for setting text color in the console. Be
+        sure to use the :meth:`ansi_reset` to reset the color after the text or the color
+        change will persist until the next color change onto future lines.
 
-        Returns:
-            str: ANSI escape sequence that sets text foreground color to this color.
+        See :ref:`terminalcolors` for more information on using colors in the terminal.
 
-        Example:
-            >>> red = Color("red")
+        :return: ANSI escape sequence that sets text foreground color to this color
+
+        :rtype: :type:`str`
+
+        :Example:
+            >>> red = painto.red
             >>> print(f"{red.ansi_escape}This text is red{red.ansi_reset}")
 
-        This can be combined with ansi_escape_bg to set a background color and text color.
+            .. raw:: html
 
-        Example:
-            >>> red = Color("red")
-            >>> black = Color("black")
-            >>> print(f"{red.ansi_escape_bg}{black.ansi_escape}A red background with black text{red.ansi_reset}")
+               <pre><font color="red">This text is red</font></pre>
+
+        :Note:
+
+            Combine this with :meth:`ansi_escape_bg` to set a background color and text color:
+
+            >>> red = painto.red
+            >>> black = painto.black
+            >>> print(f"{red.ansi_escape_bg}{black.ansi_escape}Black on red{red.ansi_reset}")
+
+            .. raw:: html
+
+               <pre><span style="color:#000;background-color:#F00;">Black on red</span></pre>
         """
         if not hasattr(self, "_console"):
             self._console = f"\033[38;2;{self.r};{self.g};{self.b}m"
@@ -370,21 +560,37 @@ class Color(tuple):
 
     @property
     def ansi_escape_bg(self) -> str:
-        """Gets the ANSI escape sequence for setting background color to this color.
+        """Gets the ANSI escape sequence for setting the background color in the console. Be
+        sure to use the :meth:`ansi_reset` to reset the color after the text or the color
+        change will persist until the next color change onto future lines.
 
-        Returns:
-            str: ANSI escape sequence that sets background color to this color.
+        See :ref:`terminalcolors` for more information on using colors in the terminal.
 
-        Example:
-            >>> red = Color("red")
-            >>> print(f"{red.ansi_escape_bg}This text has a red background{red.ansi_reset}")
+        :return:
+            ANSI escape sequence that sets text background color to this color
+        :rtype:
+            :type:`str`
 
-        This can be combined with ansi_escape to set a background color and text color.
+        :Example:
 
-        Example:
-            >>> red = Color("red")
-            >>> black = Color("black")
-            >>> print(f"{red.ansi_escape_bg}{black.ansi_escape}A red background with black text{red.ansi_reset}")
+            >>> red = painto.red
+            >>> print(f"{red.ansi_escape_bg}Text on a red background{red.ansi_reset}")
+
+            .. raw:: html
+
+                <pre><span style="background-color:#F00;">Text on a red background</span></pre>
+
+
+        :Note:
+            Combine this with :meth:`ansi_escape` to set a background color and text color::
+
+            >>> red = painto.red
+            >>> white = painto.white
+            >>> print(f"{red.ansi_escape_bg}{white.ansi_escape}White on red{red.ansi_reset}")
+
+            .. raw:: html
+
+               <pre><span style="color:#FFF;background-color:#F00;">White on red</span></pre>
 
         """
         if not hasattr(self, "_console_bg"):
@@ -398,12 +604,21 @@ class Color(tuple):
         this in your console output the colors will persist until the next color change
         onto future lines.
 
-        Returns:
-            str: ANSI escape sequence that resets all colors to default.
+        See :ref:`terminalcolors` for more information on using colors in the terminal.
 
-        Example:
-            >>> red = Color("red")
-            >>> print(f"{red.ansi_escape_bg}This text has a red background{red.ansi_reset}")
+        :return:
+            ANSI escape sequence that resets all terminal colors to default. (``<ESC>[0m``)
+        :rtype:
+            :type:`str`
+
+        :Example:
+
+            >>> sunny = painto.sunnyyellow
+            >>> print(f"{sunny.ansi_escape_bg}Always reset your colors{sunny.ansi_reset}")
+
+            .. raw:: html
+
+                <pre><span style="background-color:#fff917;">Always reset your colors</span></pre>
 
         """
         return ANSI_RESET
@@ -412,23 +627,34 @@ class Color(tuple):
 
 # region Public functions
 
+    def set_metadata(self, metadata: dict[str, str]) -> None:
+        for key, value in metadata.items():
+            setattr(self, f"_{key}", value)
+
 
     def console(self, text: str, background: 'Color' = None) -> str:
-        """Wraps text with ANSI escape sequences to display it in this color as the
+        """Wraps text with ANSI escape sequences to display it in this :type:`Color` as the
         foreground/text color. This function also wraps the text with the reset to
         put the colors back to normal after the text.
 
-        Args:
-            text: The text to colorize.
-            background: The background color to use. If not provided, the background will be left
-            as the default console background color.
+        See :ref:`terminalcolors` for more information on using colors in the terminal.
 
-        Returns:
-            str: The text wrapped with ANSI escape sequences to display in this color.
 
-        Example:
-            >>> red = Color("red")
-            >>> print(red.console("This text is red"))
+        :param text: The text to colorize.
+        :type text: :type:`str`
+        :param background: The background color to use. If not provided, the background will be left
+        :type background: :type:`Color`
+
+        :return: The text wrapped with ANSI escape sequences to display in this color.
+        :rtype: :type:`str`
+
+        :Example:
+            >>> purple = painto.royalpurple
+            >>> print(red.console("This text is royal purple"))
+
+            .. raw:: html
+
+                <pre><font color="#4b006e">This text is royal purple</font></pre>
         """
         fg_color = self.ansi_escape
         if background is None:
@@ -438,21 +664,37 @@ class Color(tuple):
         return f"{bg_color}{fg_color}{text}{ANSI_RESET}"
 
     def console_bg(self, text: str) -> str:
-        """Wraps text with ANSI escape sequences to display it with this background color.
+        """Wraps text with ANSI escape sequences to display it with this as the
+        background :type:`Color`.
 
-        The text color will be automatically set to either black or white depending on
-        the background color's luminosity for best contrast.
+        The text :type:`Color` will be automatically set to either black or white depending on
+        the background :type:`Color`'s luminosity for best contrast.
 
-        Args:
-            text: The text to display on the colored background.
+        See :ref:`terminalcolors` for more information on using colors in the terminal.
 
-        Returns:
-            str: The text wrapped with ANSI escape sequences for background and foreground colors.
 
-        Example:
-            >>> red = Color("red")
-            >>> print(red.console_bg("This text has a red background"))
-        """
+        :param text: The text to display on the colored background.
+        :type text: :type:`str`
+
+        :return: The text wrapped with ANSI escape sequences for background and foreground colors.
+
+        :Example:
+
+            >>> blue = painto.nightblue
+            >>> print(blue.console_bg("Dark background will have white text"))
+
+            .. raw:: html
+
+                <pre><span style="color:#FFF;background-color:#040348;">Dark background will have white text</span></pre>
+
+            >>> blue = painto.neonblue
+            >>> print(blue.console_bg("Light background will have black text"))
+
+            .. raw:: html
+
+                <pre><span style="color:#000;background-color:#04d9ff;">Light background will have black text</span></pre>
+
+        """  # noqa: E501
         bg_color = self.ansi_escape_bg
         fg_color = self.foreground.ansi_escape
         return f"{bg_color}{fg_color}{text}{ANSI_RESET}"
@@ -464,6 +706,9 @@ class Color(tuple):
             abs(self.b - other.b),
         )
 
+    def swatch(self, width: int = 10, height: int = 10) -> Image:
+        return _build_pil_image(self, width, height)
+
 # endregion
 # region Internal functions
 
@@ -473,7 +718,6 @@ class Color(tuple):
 
 def _clamp(value: int, min_value: int = 0, max_value: int = 255) -> int:
     return max(min_value, min(max_value, value))
-
 
 def _redistribute_rgb(r: float, g: float, b: float, a: float = 255) -> tuple[int, ...]:
     threshold = 255.999
@@ -523,8 +767,17 @@ def _rgba_from_hex(hex_str: str) -> tuple[int, ...]:
             int(hex_str[2:3] * 2, 16),
         )
         return r, g, b
-    raise ValueError()
+    raise InvalidHexStringError(hex_str)
 
+def _build_pil_image(color: Color, width: int = 10, height: int = 10) -> Image:
+    """Builds a PNG image of the color."""
+    # TODO: Should be a simple enough PNG we should build this manually instead
+    # of the overhead of PIL
+    if Image is None:
+        raise ImportError()
+    space = "RGB" if len(color) == 3 else "RGBA"
+
+    return Image.new(space, (width, height), color)
 
 # endregion Private functions
 
@@ -532,24 +785,34 @@ def _rgba_from_hex(hex_str: str) -> tuple[int, ...]:
 # region Public static functions
 
 def name_lookup(color_to_name: Color) -> str:
-    """Looks up a human-readable name for a Color using the color.pizza API.
+    """Looks up a human-readable name for a :type:`Color` using the
+    `color.pizza <https://color.pizza>`_ [#]_ API.
 
-    Makes a request to the color.pizza API to find the closest named color match
-    for the given RGB values.
+    Makes a request to the ``color.pizza`` API to find the closest named color match
+    for the given :type:`Color`.
 
-    Args:
-        color_to_name: The Color object to find a name for
+    See :ref:`newcolornames` for detail about new color name lookups, or
+    :meth:`enable_dynamic_name_lookup` and :meth:`disable_dynamic_name_lookup` about changing
+    the default behavior about automatically looking up color names.
 
-    Returns:
-        str: The suggested name for the color from the API, or "unknown" if the
-            API request fails
+    :param color_to_name: The :type:`Color` object to find a name for
+    :type color_to_name: :type:`Color`
 
-    Example:
+    :returns:
+        The suggested name for the color from the API, or "unknown" if the
+        API request fails
+    :rtype: :type:`str`
+
+    :Example:
         >>> new_color = painto.random_color()
         >>> print(painto.name_lookup(new_color))
 
-    Raises:
-        ImportError: If the requests library is not installed
+    :raises:
+        :exception ImportError: If the `requests <https://docs.python-requests.org/en/latest/>`_ \
+        library is not available.
+
+    .. [#] Here is an `overview of the color.pizza API <https://felixluginbuhl.com/colornames/reference/get_color_colorpizza.html>`_
+
     """
     # late import so we don't try unless we're actually going to use it.
     try:
@@ -574,19 +837,34 @@ def name_lookup(color_to_name: Color) -> str:
 def random_color(count: int = 1) -> Color | list[Color]:
     """Generates random color(s) with RGB values between 0-255.
 
-    Args:
-        count (int, optional): Number of random colors to generate. Defaults to 1.
+    :param count: Number of random colors to generate. Defaults to 1.
+    :type count: int
 
-    Returns:
-        Color: If count=1, returns a single random Color object.
-        list[Color]: If count>1, returns a list of random Color objects.
+    :return: A single random Color object or a list of random Color objects.
+    :rtype: Color or list[Color]
 
-    Example:
+    :Example:
         >>> color = painto.random_color()  # Get a single random color
+        >>> print(color.hex)
+
+        ``#6589E7`` |6589E7|
+
         >>> colors = painto.random_color(5)  # Get 5 random colors
+        >>> for color in colors:
+        ...     print(color.hex)
+
+        ``#9ADE8A`` |9ADE8A|
+
+        ``#F2F578`` |F2F578|
+
+        ``#633149`` |633149|
+
+        ``#9313C0`` |9313C0|
+
+        ``#83E2A4`` |83E2A4|
 
     If you're wanting a random color or colors from a specific color list,
-    see ```ColorList.random()```.
+    see :meth:`ColorList.random`.
     """
     if count == 1:
         return Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))  # noqa: S311
@@ -626,10 +904,9 @@ def sort_by_hue() -> None:
 
     This function changes the global sorting option to sort colors by their hue
     (rainbow) order. The default is to sort by luminosity/brightness. To change
-    back to sorting by luminosity, call ```sort_by_luminosity()```.
+    back to sorting by luminosity, call :meth:`sort_by_luminosity`.
 
-    Returns:
-        None
+    See also :ref:`sortingcolors` for examples and details on sorting.
     """
     global SORT_BY
     SORT_BY = ColorSort.HUE
@@ -640,10 +917,10 @@ def sort_by_luminosity() -> None:
     This function changes the global sorting option to sort colors by their
     luminosity value. This is the default sorting method.
 
-    You can change to sort by hue (rainbow) by calling ```sort_by_hue()```.
+    You can change to sort by hue (rainbow) by calling :meth:`sort_by_hue`.
 
-    Returns:
-        None
+    See also :ref:`sortingcolors` for examples and details on sorting.
+
     """
     global SORT_BY
     SORT_BY = ColorSort.LUMINOSITY
@@ -651,45 +928,65 @@ def sort_by_luminosity() -> None:
 def sorting_by() -> str:
     """Gets the current global color sorting method.
 
-    Returns:
-        str: The name of the current sorting method ('hue' or 'luminosity')
+    See also :ref:`sortingcolors` for examples and details on sorting.
+
+    :returns:
+        The name of the current sorting method ('hue' or 'luminosity')
+    :rtype: :type:`str`
     """
     return SORT_BY.name.lower()
 
-def dynamic_name_lookup(lookup: bool = False) -> None:
+def disable_dynamic_name_lookup() -> None:
+    """Disables dynamic name lookup.
+
+    When dynamic name lookup is disabled, the name will return as the hex value
+    if it isn't in one of the color_list sets. This is the default behavior.
+
+    See also :ref:`newcolornames`.
+
+    """
+    global DYNAMIC_NAME_LOOKUP
+    DYNAMIC_NAME_LOOKUP = False
+
+def enable_dynamic_name_lookup() -> None:
     """Sets whether dynamic name lookup is enabled.
 
     When dynamic name lookup is enabled, if a color's name isn't known when
-    using color.name, it will be looked up using the color.pizza API. With this
-    disabled (the default), the name will return as the hex value. This uses
-    the ```name_lookup()``` function and will raise an ImportError if the
-    requests library is not installed.
+    using color.name, it will be looked up using the ``color.pizza`` API. With this
+    disabled (the default), the name will return as the hex value.
 
-    Note:
+    See also :ref:`newcolornames`.
+
+    .. warning::
         Use this with care. It will slow any access to color.name that isn't known
         and cached.
 
-    Args:
-        lookup (bool, optional): Whether to enable dynamic name lookup. Defaults to False.
 
-    Returns:
-        None
 
-    Example:
+    :Example:
         >>> new_color = painto.Color("#946A87")
-        >>> print(new_color.name)  # '#946A87'
-        >>> painto.dynamic_name_lookup(True)
-        >>> print(new_color.name)  # 'Fruit of Passion'
+        >>> print(new_color.name)
+
+        ``#946A87`` |946A87|
+
+        >>> painto.enable_dynamic_name_lookup()
+        >>> print(new_color.name)
+
+        ``Fruit of Passion`` |946A87|
+
     """
     global DYNAMIC_NAME_LOOKUP
-    DYNAMIC_NAME_LOOKUP = lookup
+    DYNAMIC_NAME_LOOKUP = True
 
 def dynamic_name_lookup_enabled() -> bool:
     """Returns whether dynamic name lookup is currently enabled. Change this
-    with ```dynamic_name_lookup()```.
+    with :meth:`enable_dynamic_name_lookup` or :meth:`disable_dynamic_name_lookup`.
 
-    Returns:
-        bool: True if dynamic name lookup is enabled, False otherwise.
+    See also :ref:`newcolornames`.
+
+    :returns:
+        True if dynamic name lookup is enabled, False otherwise.
+    :rtype: :type:`bool`
     """
     return DYNAMIC_NAME_LOOKUP
 

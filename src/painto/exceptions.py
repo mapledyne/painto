@@ -22,3 +22,8 @@ class InvalidHexStringError(ValueError):
 class RequestsRequiredError(ImportError):
     def __init__(self) -> None:
         super().__init__("requests is required for this functionality")
+
+class InvalidColorArgumentsError(ValueError):
+    def __init__(self) -> None:
+        super().__init__("Invalid arguments. Must be a color name, "
+                         "hex string, RGB(A) tuple, or 3-4 RGB(A) values")
