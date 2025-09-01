@@ -14,9 +14,45 @@ To use painto, first install it using pip:
 
    (.venv) $ pip install painto
 
+.. _usingcolors:
 
 Using Colors
 ------------
+
+Welcome to the world of |painto| colors!
+
+With painto, working with colors in Python is simple and fun. You can use painto's color objects
+just like you would use regular color values in libraries such as pillow, pygame, and more, with
+no conversion or extra steps needed. Whether you're drawing images, filling surfaces, or setting
+text colors, just pass a painto color directly and it will work seamlessly.
+
+For example, you can do things like:
+
+.. code-block:: python
+
+   import painto
+   from PIL import Image
+
+   img = Image.new("RGB", (100, 100), painto.red)
+
+Or with pygame:
+
+.. code-block:: python
+
+   import painto
+   import pygame
+
+   screen.fill(painto.blue)
+
+No matter what system you're using, painto colors are ready to go.
+
+
+**But why use painto at all instead of just using native color values?**
+
+   Using |painto| instead of native color values gives you a lot more flexibility and power:
+   you can easily convert between color formats (hex, RGB, HSL, etc.), access color names,
+   generate random or sorted color palettes, adjust brightness or hue, and even print colored
+   text to the terminal, with a simple API. Read on for all the things |painto| can do.
 
 .. _colorproperties:
 
@@ -24,27 +60,273 @@ Using Colors
 Color Properties
 ^^^^^^^^^^^^^^^^
 
-Properties.
+With |painto|, every color is basically a little data-packed rainbow.
+
+Here's a quick tour of the cool stuff you can get from any |painto| :class:`Color <painto.color.Color>`:
+
+- :attr:`.hex <painto.color.Color.hex>`
+  The classic hex code, like ``#FF0000`` |red| for red. Great for web stuff,
+  impressing your designer friends, or just looking fancy.
+
+- :attr:`.rgb <painto.color.Color.rgb>`  
+  The RGB tuple, e.g., ``(255, 0, 0)``. Perfect for pillow, pygame, or any time you want it to look
+  really python-y.
+
+- :attr:`.rgba <painto.color.Color.rgba>`  
+  Just like :attr:`Color.rgb`, but with an alpha channel for transparency.
+
+- :attr:`.hsv <painto.color.Color.hsv>`  
+  The HSV (Hue, Saturation, Value) :type:`tuple`. Sometimes dealing with RGB can be a hassle to get
+  exactly what you want. These can also be accessed as :attr:`.h <painto.color.Color.h>`,
+  :attr:`.s <painto.color.Color.s>`, and :attr:`.v <painto.color.Color.v>`.
+
+- :attr:`.name <painto.color.Color.name>`  
+  The best-guess name for the color, like ``red`` |red|, ``blue`` |blue|, or even ``babypukegreen`` |b6c406|.
+  If painto doesn't have a name, this will return the :attr:`.hex <painto.color.Color.hex>` value,
+  though there's a flag you can set to look up unknown names, too. See :ref:`newcolornames`.
+
+- :attr:`.web <painto.color.Color.web>`  
+  The CSS string for the color, so you can put it straight into your web projects.
+
+- :attr:`.luminosity <painto.color.Color.luminosity>`
+  How bright is this :class:`Color`, really? Get a number from 0 (dark, well, black at that point)
+  to 1 (bright).
+
+- :attr:`.grayscale <painto.color.Color.grayscale>`  
+  The grayscale :class:`Color` of the original. This is the color that is the same brightness as the original
+  color, but with no color information.
+
+.. note:: The :attr:`.grayscale <painto.color.Color.grayscale>` and
+   :attr:`.luminosity <painto.color.Color.luminosity>` are calculated using the WCAG reference formula
+   from https://www.w3.org/WAI/GL/wiki/Relative_luminance .
+
+
+And that's just the start! Every |painto| :class:`Color <painto.color.Color>` is like a Swiss Army knife for colors.
+Keep reading for all of the other things that you can do.
+
+:Example:
+
+   .. code-block:: python
+
+      import painto
+
+      c = painto.green
+      print(c.hex)         # '#00FF00'
+      print(c.rgb)         # (0, 255, 0)
+      print(c.hsl)         # (120, 100, 50)
+      print(c.name)        # 'lime'
+      print(c.luminance)   # 0.7152
+      print(c.console("Look, I'm green! (or at least lime)"))
+
+   .. raw:: html
+
+      <pre><font color="#00FF00">Look, I'm green! (or at least lime)</font></pre>
+
 
 .. _changingcolors:
 
-Changing Colors
-^^^^^^^^^^^^^^^
+Changing Colors: Mix, Match, and Tweak!
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Changing colors.
+Colors in |painto| aren't just static, you can blend, lighten, darken, and otherwise
+transform colors with simple methods and operators.
+
+**Mixing Colors**
+
+Want to blend two colors together? Just use the `+` operator:
+
+   .. code-block:: python
+
+      purple = painto.red + painto.blue
+      print(purple.hex)
+      
+   ``#7F007F`` |7F007F|
+
+
+**Lightening and Darkening**
+
+Need a lighter tint or darker shade? You can multiply or divide the :class:`Color` by
+a factor:
+
+   .. code-block:: python
+
+      red = painto.red
+      blue = painto.blue
+
+      darker_red = red / 2
+      lighter_blue = blue * 2
+
+      print(red.hex)
+      print(darker_red.hex)
+      print(blue.hex)
+      print(lighter_blue.hex)
+
+   ``#FF0000`` |FF0000|
+
+   ``#7F0000`` |7F0000|
+   
+   ``#0000FF`` |0000FF|
+   
+   ``#7F7FFF`` |7F7FFF|
+
+
+**Invert:** Get the opposite :class:`Color` with the `-` operator:
+
+   .. code-block:: python
+
+      blue = painto.blue
+      opposite_blue = -blue  # yellow
+
+      print(blue.hex)
+      print(opposite_blue.hex)
+
+   ``#0000FF`` |0000FF|
+
+   ``#FFFF00`` |FFFF00|
+
 
 .. _terminalcolors:
 
 The Terminal
 ^^^^^^^^^^^^
 
+You can print colored text or backgrounds in your terminal using :class:`Color <painto.color.Color>` objects.
+Each color provides methods for generating ANSI escape codes for foreground and background colors.
 
-writing colors to the terminal.
+Printing to the terminal usually involves three or four things: an ANSI escape sequence for the color of the text,
+another ANSI escape for the background (if using), then the text you want printed, then the ANSI
+reset sequence to get back to normal so the colors don't follow you onto future text.
+
+|painto| can help with this by building you the ANSI sequences for any color.
+
+:Foreground Color: :attr:`.ansi_escape <painto.color.Color.ansi_escape>`
+
+   .. code-block:: python
+
+      red = painto.red
+      print(red.ansi_escape)
+
+   ``\033[38;2;255;0;0m``
+
+:Background Color: :attr:`.ansi_escape_bg <painto.color.Color.ansi_escape_bg>`
+
+   .. code-block:: python
+
+      red = painto.red
+      print(red.ansi_escape_bg)
+   
+   ``\033[48;2;255;0;0m``
+
+:Reset: :attr:`.ansi_reset <painto.color.Color.ansi_reset>`
+
+   .. code-block:: python
+
+      print(painto.ansi_reset)  # The reset is the same for all colors.
+
+   ``\033[0m``
+
+
+By themselves the can be a bit unweidly but still useful if you're doing complicated things.
+
+:Example: Print colored text and backgrounds
+
+   .. code-block:: python
+
+      red = painto.red
+      blue = painto.blue
+
+      print(red.ansi_escape + "Red text" + painto.ansi_reset)
+      print(blue.ansi_escape_bg + red.ansi_escape + "Blue background, red text" + painto.ansi_reset)
+   
+   .. raw:: html
+
+      <pre><span style="color:#F00;">Red text</span></pre>
+      <pre><span style="color:#F00;background-color:#00F;">Blue background, red text</span></pre>
+
+**But there's an easier way than that, right?**
+
+Yep! If you're just wanting to print a string without too much fuss, there are easier methods avaiable.
+
+There are two methods that wrap all of the escape work up for you, :meth:`.console(str) <painto.color.Color.console>`
+and :meth:`.console_bg(str) <painto.color.Color.console_bg>`.
+
+The first will wrap the text with the :class:`Color` as the foreground text color. The second will use the
+:class:`Color` as the background color and choose a text color (either white or black) that contrasts well with the backgorund.
+
+:Example:
+
+   .. code-block:: python
+
+      violet = painto.violet
+      yellow = painto.yellow
+
+      print(violet.console("Violet text"))
+      print(yellow.console_bg("Yellow background"))  # will choose black text
+   
+   .. raw:: html
+
+      <pre><span style="color:#9A0EEA;">Violet text</span></pre>
+      <pre><span style="color:#000;background-color:#fff917;">Yellow background</span></pre>
+   
+Using :meth:`.console_bg(str) <painto.color.Color.console_bg>` is particularly handy (if you want
+colored background) since the text color is also picked up automatically. Both functions also add
+the ANSI reset code to the end of the returned string.
+
 
 Colors with other libraries
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-pygame, pillow, etc.
+You can use painto's :class:`Color <painto.color.Color>` objects directly with many popular
+Python graphics libraries, since they accept RGB(A) tuples or hex strings.
+
+Pillow (PIL)
+""""""""""""
+
+:Example:
+
+   .. code-block:: python
+
+      from PIL import Image, ImageDraw
+      import painto
+
+      img = Image.new("RGB", (100, 100), painto.sky_blue)
+      draw = ImageDraw.Draw(img)
+      draw.rectangle([10, 10, 90, 90], fill=painto.red)
+      img.show()
+
+Pygame
+""""""
+
+:Example:
+
+   .. code-block:: python
+
+      import pygame
+      import painto
+
+      pygame.init()
+      screen = pygame.display.set_mode((200, 200))
+      screen.fill(painto.green)
+      pygame.draw.circle(screen, painto.orange, (100, 100), 50)
+      pygame.display.flip()
+      pygame.time.wait(1000)
+
+Tkinter
+"""""""
+
+:Example:
+
+   .. code-block:: python
+
+      import tkinter as tk
+      import painto
+
+      root = tk.Tk()
+      canvas = tk.Canvas(root, width=200, height=200)
+      canvas.pack()
+      # Tkinter expects hex strings for colors
+      canvas.create_rectangle(50, 50, 150, 150, fill=painto.blue.hex)
+      root.mainloop()
 
 
 .. _newcolornames:
@@ -52,7 +334,32 @@ pygame, pillow, etc.
 New Color Names
 ^^^^^^^^^^^^^^^
 
-How to add or look up color names.
+Normally, colors will only return a true name from :attr:`.name <painto.color.Color.name>` if it
+has a name from one of the built-in color lists. However, if you want to look up a color name
+you can do that by enabling dynamic name lookup. This will use the ``color.pizza`` API to look up
+a name for any RGB color. To do this, there are two helped functions to enable and disable dynamic
+name lookup: :meth:`enable_dynamic_name_lookup() <painto.color.enable_dynamic_name_lookup>` and
+:meth:`disable_dynamic_name_lookup() <painto.color.disable_dynamic_name_lookup>`.
+
+:Example:
+
+   .. code-block:: python
+
+      >>> new_color = painto.Color("#946A87")
+      >>> print(new_color.name)
+
+   ``#946A87`` |946A87|
+
+      >>> painto.enable_dynamic_name_lookup()
+      >>> print(new_color.name)
+
+   ``Fruit of Passion`` |946A87|
+
+
+.. warning::
+   Use this with care. It will slow any access to :attr:`.name <painto.color.Color.name>` that isn't known
+   and cached.
+
 
 .. _colorlists:
 
@@ -61,15 +368,73 @@ Working With Lists of colors
 
 sorting, ranges, etc.
 
+.. TODO: Info about lists and ranges.
+
 .. _sortingcolors:
 
 Sorting Colors
 ^^^^^^^^^^^^^^
 
-An example on how to sort
+Colors can be sorted by hue (rainbow) or luminosity (brightness). The default is luminosity.
+
+:Sorting by Hue: |hues|
+
+:Sorting by Luminosity: |lumin|
+
+
+You can change sorting by calling :func:`painto.sort_by_hue` or :func:`painto.sort_by_luminosity`,
+and see what the current sorting method is with :func:`painto.sorting_by`.
+
+:Example:
+
+   A random set of colors sorted both ways for comparison.
+
+   >>> random_colors = painto.xkcd.random(20)
+
+   |random|
+
+   >>> random_colors = sorted(random_colors)  # by luminosity, the default
+
+   |random_lumin|
+
+   >>> painto.sort_by_hue()
+   >>> random_colors = sorted(random_colors)
+
+   |random_hue|
 
 
 Making Your Own Lists of Colors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-custom color lists. Adding to the lookup color_lists object.
+If you're using a series of colors regularly, you can create a named
+:class:`ColorList <painto.color_list.ColorList>` to make it more convenient to access them.
+
+Here's how the "base colors" list was created, for instance:
+
+:Example:
+   .. code-block:: python
+
+      base_colors = ColorList({
+         "black": Color("#000000"),
+         "white": Color("#FFFFFF"),
+         "red": Color("#FF0000"),
+         "green": Color("#00FF00"),
+         "blue": Color("#0000FF"),
+         "yellow": Color("#FFFF00"),
+         "cyan": Color("#00FFFF"),
+         "magenta": Color("#FF00FF"),
+      })
+
+The list is simply the names of the colors, and the associated :class:`Color`s.
+
+This can be used directly in the same way and of the built-in lists are used, or you can make
+your list act even more native within the |painto| library by adding it to the ``color_lists`` list.
+
+:Example:
+
+   .. code-block:: python
+
+      painto.color_lists.append(my_new_color_list)
+
+When you do this, you can access the colors in the list as attributes of the painto module, so
+a color in your new list called ``superorange`` could be accessed as ``painto.superorange``.

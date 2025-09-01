@@ -13,6 +13,12 @@ API
    It can be used as a placename for transparent backgrounds or similar. Any color that ends up
    with an alpha value of 0 will be treated as transparent.
 
+.. attribute:: painto.rainbow
+
+   This is a :class:`ColorList` of the colors in traditional rainbow order: ``red`` |E50000| , ``orange`` |F97306|,
+   ``yellow`` |FFFF14|, ``green`` |15B01A|, ``blue`` |0343DF|,
+   ``indigo`` |380282|, ``violet`` |9A0EEA| (ROYGBIV).
+
 .. attribute:: painto.pride
 
    This is a :class:`ColorList` of the colors based on the Pride flag [#pride]_. Because the Pride flag

@@ -105,7 +105,7 @@ for c in colors:
     print(c.console_bg(c.hex))
 ```
 
-![Red to blue over 10 steps](docs/images/red_blue_steps.png)
+![Red to blue over 10 steps](docs/assets/red_to_blue_range.png)
 
 ```python
 # Inclusive range (includes end color)

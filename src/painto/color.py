@@ -259,23 +259,47 @@ class Color(tuple):
     def rgba(self) -> tuple[int, int, int, int]:
         """ Returns the Color object as an RGBA tuple.
 
-        Typically this property shouldn't be needed since Color itself
-        is a tuple and can be used in place of one anywhere an RGB tuple
+        Typically this property shouldn't be needed since :class:`Color` itself
+        is a :type:`tuple` and can be used in place of one anywhere an RGB :type:`tuple`
         is expected. Use this, then, if you want to be more explicit,
-        or if you want to force the tuple into a len(4) :type:`tuple` - if there
-        is no transparency on a tuple, it becomes a len(3) (RGB only) :type:`tuple`.
+        or if you want to force the :type:`tuple` into a len(4) :type:`tuple`,
+        otherwise if there is no transparency on a :type:`tuple`, it becomes a
+        len(3) (RGB only) :type:`tuple`.
 
-        See :attr:`rgb` for the same concept but only returning the RGB typle
+        See :attr:`rgb` for the same concept but only returning the RGB :type:`tuple`
         as a len(3) :type:`tuple`, dropping the alpha information.
 
         :returns: RGBA values (0-255) for the color values, including alpha.
 
-        :rtype: :type:`tuple[int, int, int int]`
+        :rtype: :type:`tuple[int, int, int, int]`
 
         See also: :attr:`rgb`, :attr:`r`, :attr:`g`, :attr:`b`, :attr:`a`
 
         """
         return self.r, self.g, self.b, self.a
+
+    @property
+    def rgb(self) -> tuple[int, int, int]:
+        """ Returns the Color object as an RGB tuple.
+
+        Typically this property shouldn't be needed since :class:`Color` itself
+        is a :type:`tuple` and can be used in place of one anywhere an RGB tuple
+        is expected. Use this, then, if you want to be more explicit,
+        or if you want to force the :type:`tuple` into a len(3) :type:`tuple`, removing
+        any alpha (transparency) information if there is any.
+
+        See :attr:`rgba` for the same concept but returning a RGBA :type:`tuple`
+        as a len(4) :type:`tuple` instead.
+
+        :returns: RGB values (0-255) for the color values.
+
+        :rtype: :type:`tuple[int, int, int]`
+
+        See also: :attr:`rgba`, :attr:`r`, :attr:`g`, :attr:`b`, :attr:`a`
+
+        """
+
+        return self.r, self.g, self.b
 
     @property
     def r(self) -> int:
@@ -333,9 +357,6 @@ class Color(tuple):
             return self[3]
         return 255
 
-    @property
-    def rgb(self) -> tuple[int, int, int]:
-        return self.r, self.g, self.b
 
     @property
     def hls(self) -> tuple[float, float, float]:
@@ -907,6 +928,9 @@ def sort_by_hue() -> None:
     back to sorting by luminosity, call :meth:`sort_by_luminosity`.
 
     See also :ref:`sortingcolors` for examples and details on sorting.
+
+    |hues|
+
     """
     global SORT_BY
     SORT_BY = ColorSort.HUE
@@ -920,6 +944,8 @@ def sort_by_luminosity() -> None:
     You can change to sort by hue (rainbow) by calling :meth:`sort_by_hue`.
 
     See also :ref:`sortingcolors` for examples and details on sorting.
+
+    |lumin|
 
     """
     global SORT_BY
@@ -958,9 +984,8 @@ def enable_dynamic_name_lookup() -> None:
     See also :ref:`newcolornames`.
 
     .. warning::
-        Use this with care. It will slow any access to color.name that isn't known
+        Use this with care. It will slow any access to :attr:`.name <painto.color.Color.name>` that isn't known
         and cached.
-
 
 
     :Example:

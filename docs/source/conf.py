@@ -38,16 +38,21 @@ autodoc_member_order = 'bysource'
 
 html_theme = 'nature'
 html_static_path = ['_static']
-
+html_favicon = "../assets/hexagon_rainbow.png"
 html_scaled_image_link = False
 
 
 
 rst_epilog = """
-.. |painto| replace:: **🌈painto**
+.. |painto| replace:: **🎨painto**
 .. |red| image:: ../assets/FF0000.png
 .. |blue| image:: ../assets/0000FF.png
 .. |green| image:: ../assets/00FF00.png
+.. |hues| image:: ../assets/hue_colors.png
+.. |lumin| image:: ../assets/lumin_colors.png
+.. |random| image:: ../assets/xkcd_random.png
+.. |random_hue| image:: ../assets/hue_sort.png
+.. |random_lumin| image:: ../assets/lumin_sort.png
 """
 
 def list_hex_assets():
@@ -65,5 +70,3 @@ def list_hex_assets():
 for hex in list_hex_assets():
     asset = f".. |{hex}| image:: ../assets/{hex}.png\n"
     rst_epilog += asset
-
-print(rst_epilog)

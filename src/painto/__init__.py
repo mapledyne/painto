@@ -14,15 +14,16 @@ from .color import (
 from .exceptions import ColorAttributeNotFoundError
 from .list_base import base_colors
 from .list_pride import pride
+from .list_rainbow import rainbow
 from .list_w3c import w3c
 from .list_xkcd import xkcd
 
 # TODO: Add X11 colors
 color_lists.append(w3c)
 color_lists.append(xkcd)
+color_lists.append(rainbow)
 color_lists.append(pride)
 color_lists.append(base_colors)
-
 
 def __getattr__(name: str) -> Color:
     for color_list in color_lists:
@@ -35,7 +36,7 @@ __all__ = ["Color", "__getattr__", "color_range", "random_color"]
 __all__ += ["sort_by_hue", "sort_by_luminosity", "sorting_by"]
 __all__ += ["disable_dynamic_name_lookup", "enable_dynamic_name_lookup"]
 __all__ += ["dynamic_name_lookup_enabled"]
-__all__ += ["base_colors", "pride", "transparent", "w3c", "xkcd"]
+__all__ += ["base_colors", "pride", "transparent", "w3c", "xkcd", "rainbow"]
 
 
 

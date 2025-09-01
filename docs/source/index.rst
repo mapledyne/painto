@@ -1,10 +1,17 @@
 .. _index:
 
-🌈 painto documentation
+|painto| documentation
 ========================
 
+.. image:: ../assets/hexagon_rainbow.png
+   :width: 100px
+   :align: left
+
 A flexible color library for Python with support for multiple color formats,
-operations, conversion, and more. 
+operations, conversion, and more. Use as a drop-in addition to pillow, pygame,
+and more, giving you more options and control with your colors.
+
+
 
 Introduction
 ------------
