@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>API &#8212; painto 0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css?v=279e0f84" />
+    <script src="_static/documentation_options.js?v=b489f392"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="_static/hexagon_rainbow.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Usage Guide" href="usage.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Usage Guide"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">painto 0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">API</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-painto.color">
+<span id="api"></span><h1>API<a class="headerlink" href="#module-painto.color" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="painto.color.Color">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">painto.color.</span></span><span class="sig-name descname"><span class="pre">Color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/painto/color.html#Color"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#painto.color.Color" title="Link to this definition">¶</a></dt>
+<dd><p>A color class that represents RGBA colors and supports various operations.</p>
+<p>The Color class can be initialized from:</p>
+<ul class="simple">
+<li><p>Color names (e.g., “red”, “blue”, “aquamarine”)</p></li>
+<li><p>Hex strings (e.g., “<code class="docutils literal notranslate"><span class="pre">#6FC276</span></code> <img alt="6FC276" src="_images/6FC276.png" />” or
+“<code class="docutils literal notranslate"><span class="pre">#6488EAFF</span></code> <img alt="6488EA" src="_images/6488EA.png" />” or “<code class="docutils literal notranslate"><span class="pre">#F00</span></code> <img alt="red" src="_images/FF0000.png" />”)</p></li>
+<li><p>RGB/RGBA tuples (e.g., (255, 0, 0) or (255, 0, 0, 128))</p></li>
+</ul>
+<p>Features:</p>
+<ul class="simple">
+<li><p>Arithmetic operations (+, *, /) for color blending and brightness
+adjustment: see <a class="reference internal" href="usage.html#changingcolors"><span class="std std-ref">Changing Colors: Mix, Match, and Tweak!</span></a></p></li>
+<li><p>Comparison operations for sorting by
+<code class="xref py py-func docutils literal notranslate"><span class="pre">brightness</span> <span class="pre">(luminosity)</span></code> or
+<code class="xref py py-func docutils literal notranslate"><span class="pre">rainbow</span> <span class="pre">color</span> <span class="pre">(hue)</span></code>: See <a class="reference internal" href="usage.html#sortingcolors"><span class="std std-ref">Sorting Colors</span></a></p></li>
+<li><p>Lots of conversions and color details: See <a class="reference internal" href="usage.html#colorproperties"><span class="std std-ref">Color Properties</span></a></p></li>
+</ul>
+<p>The full <a class="reference internal" href="usage.html#usageguide"><span class="std std-ref">Usage Guide</span></a> has more comprehensive examples and idea.</p>
+<dl class="field-list">
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">red</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">red</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">red</span><span class="o">.</span><span class="n">hex</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">#FF0000</span></code> <img alt="red" src="_images/FF0000.png" /></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">blue</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="s2">&quot;#0000FF&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">blue</span><span class="o">.</span><span class="n">hex</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">#0000FF</span></code> <img alt="blue" src="_images/0000FF.png" /></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">purple</span> <span class="o">=</span> <span class="n">red</span> <span class="o">+</span> <span class="n">blue</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">purple</span><span class="o">.</span><span class="n">hex</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">#7F007F</span></code> <img alt="7F007F" src="_images/7F007F.png" /></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">darker_purple</span> <span class="o">=</span> <span class="n">purple</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">darker_purple</span><span class="o">.</span><span class="n">hex</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">#3F003F</span></code> <img alt="3F003F" src="_images/3F003F.png" /></p>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="painto.color.Color.rgba">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rgba</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#painto.color.Color.rgba" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the Color object as an RGBA tuple.</p>
+<p>Typically this property shouldn’t be needed since <a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a> itself
+is a <code class="xref py py-type docutils literal notranslate"><span class="pre">tuple</span></code> and can be used in place of one anywhere an RGB <code class="xref py py-type docutils literal notranslate"><span class="pre">tuple</span></code>
+is expected. Use this, then, if you want to be more explicit,
+or if you want to force the <code class="xref py py-type docutils literal notranslate"><span class="pre">tuple</span></code> into a len(4) <code class="xref py py-type docutils literal notranslate"><span class="pre">tuple</span></code>,
+otherwise if there is no transparency on a <code class="xref py py-type docutils literal notranslate"><span class="pre">tuple</span></code>, it becomes a
+len(3) (RGB only) <code class="xref py py-type docutils literal notranslate"><span class="pre">tuple</span></code>.</p>
+<p>See <a class="reference internal" href="#painto.color.Color.rgb" title="painto.color.Color.rgb"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rgb</span></code></a> for the same concept but only returning the RGB <code class="xref py py-type docutils literal notranslate"><span class="pre">tuple</span></code>
+as a len(3) <code class="xref py py-type docutils literal notranslate"><span class="pre">tuple</span></code>, dropping the alpha information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>RGBA values (0-255) for the color values, including alpha.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-type docutils literal notranslate"><span class="pre">tuple[int,</span> <span class="pre">int,</span> <span class="pre">int,</span> <span class="pre">int]</span></code></p>
+</dd>
+</dl>
+<p>See also: <a class="reference internal" href="#painto.color.Color.rgb" title="painto.color.Color.rgb"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rgb</span></code></a>, <a class="reference internal" href="#painto.color.Color.r" title="painto.color.Color.r"><code class="xref py py-attr docutils literal notranslate"><span class="pre">r</span></code></a>, <a class="reference internal" href="#painto.color.Color.g" title="painto.color.Color.g"><code class="xref py py-attr docutils literal notranslate"><span class="pre">g</span></code></a>, <a class="reference internal" href="#painto.color.Color.b" title="painto.color.Color.b"><code class="xref py py-attr docutils literal notranslate"><span class="pre">b</span></code></a>, <a class="reference internal" href="#painto.color.Color.a" title="painto.color.Color.a"><code class="xref py py-attr docutils literal notranslate"><span class="pre">a</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="painto.color.Color.rgb">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rgb</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#painto.color.Color.rgb" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the Color object as an RGB tuple.</p>
+<p>Typically this property shouldn’t be needed since <a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code></a> itself
+is a <code class="xref py py-type docutils literal notranslate"><span class="pre">tuple</span></code> and can be used in place of one anywhere an RGB tuple
+is expected. Use this, then, if you want to be more explicit,
+or if you want to force the <code class="xref py py-type docutils literal notranslate"><span class="pre">tuple</span></code> into a len(3) <code class="xref py py-type docutils literal notranslate"><span class="pre">tuple</span></code>, removing
+any alpha (transparency) information if there is any.</p>
+<p>See <a class="reference internal" href="#painto.color.Color.rgba" title="painto.color.Color.rgba"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rgba</span></code></a> for the same concept but returning a RGBA <code class="xref py py-type docutils literal notranslate"><span class="pre">tuple</span></code>
+as a len(4) <code class="xref py py-type docutils literal notranslate"><span class="pre">tuple</span></code> instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>RGB values (0-255) for the color values.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-type docutils literal notranslate"><span class="pre">tuple[int,</span> <span class="pre">int,</span> <span class="pre">int]</span></code></p>
+</dd>
+</dl>
+<p>See also: <a class="reference internal" href="#painto.color.Color.rgba" title="painto.color.Color.rgba"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rgba</span></code></a>, <a class="reference internal" href="#painto.color.Color.r" title="painto.color.Color.r"><code class="xref py py-attr docutils literal notranslate"><span class="pre">r</span></code></a>, <a class="reference internal" href="#painto.color.Color.g" title="painto.color.Color.g"><code class="xref py py-attr docutils literal notranslate"><span class="pre">g</span></code></a>, <a class="reference internal" href="#painto.color.Color.b" title="painto.color.Color.b"><code class="xref py py-attr docutils literal notranslate"><span class="pre">b</span></code></a>, <a class="reference internal" href="#painto.color.Color.a" title="painto.color.Color.a"><code class="xref py py-attr docutils literal notranslate"><span class="pre">a</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="painto.color.Color.r">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">r</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#painto.color.Color.r" title="Link to this definition">¶</a></dt>
+<dd><p>Returns just the R (red) component of the color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Red <img alt="red" src="_images/FF0000.png" /> component of the color (0-255)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-type docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+<p>See also: <a class="reference internal" href="#painto.color.Color.rgb" title="painto.color.Color.rgb"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rgb</span></code></a>, <a class="reference internal" href="#painto.color.Color.rgb" title="painto.color.Color.rgb"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rgb</span></code></a>, <a class="reference internal" href="#painto.color.Color.g" title="painto.color.Color.g"><code class="xref py py-attr docutils literal notranslate"><span class="pre">g</span></code></a>, <a class="reference internal" href="#painto.color.Color.b" title="painto.color.Color.b"><code class="xref py py-attr docutils literal notranslate"><span class="pre">b</span></code></a>, <a class="reference internal" href="#painto.color.Color.a" title="painto.color.Color.a"><code class="xref py py-attr docutils literal notranslate"><span class="pre">a</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="painto.color.Color.g">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">g</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#painto.color.Color.g" title="Link to this definition">¶</a></dt>
+<dd><p>Returns just the G (green) component of the color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Green <img alt="green" src="_images/00FF00.png" /> component of the color (0-255)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-type docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+<p>See also: <a class="reference internal" href="#painto.color.Color.rgb" title="painto.color.Color.rgb"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rgb</span></code></a>, <a class="reference internal" href="#painto.color.Color.rgb" title="painto.color.Color.rgb"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rgb</span></code></a>, <a class="reference internal" href="#painto.color.Color.r" title="painto.color.Color.r"><code class="xref py py-attr docutils literal notranslate"><span class="pre">r</span></code></a>, <a class="reference internal" href="#painto.color.Color.b" title="painto.color.Color.b"><code class="xref py py-attr docutils literal notranslate"><span class="pre">b</span></code></a>, <a class="reference internal" href="#painto.color.Color.a" title="painto.color.Color.a"><code class="xref py py-attr docutils literal notranslate"><span class="pre">a</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="painto.color.Color.b">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#painto.color.Color.b" title="Link to this definition">¶</a></dt>
+<dd><p>Returns just the B (blue) component of the color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Blue <img alt="blue" src="_images/0000FF.png" /> component of the color (0-255)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-type docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+<p>See also: <a class="reference internal" href="#painto.color.Color.rgb" title="painto.color.Color.rgb"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rgb</span></code></a>, <a class="reference internal" href="#painto.color.Color.rgb" title="painto.color.Color.rgb"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rgb</span></code></a>, <a class="reference internal" href="#painto.color.Color.r" title="painto.color.Color.r"><code class="xref py py-attr docutils literal notranslate"><span class="pre">r</span></code></a>, <a class="reference internal" href="#painto.color.Color.g" title="painto.color.Color.g"><code class="xref py py-attr docutils literal notranslate"><span class="pre">g</span></code></a>, <a class="reference internal" href="#painto.color.Color.a" title="painto.color.Color.a"><code class="xref py py-attr docutils literal notranslate"><span class="pre">a</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="painto.color.Color.a">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#painto.color.Color.a" title="Link to this definition">¶</a></dt>
+<dd><p>Returns just the A (alpha/trasparency) component of the color.</p>
+<p>If a <code class="xref py py-class docutils literal notranslate"><span class="pre">color</span></code> does not have any transparency, the color
+<code class="xref py py-type docutils literal notranslate"><span class="pre">tuple</span></code> returns without it (125, 10, 45). With this property
+it returns 255 (for “no alpha”) consistent with other RGBA uses when
+you need an alpha number, even if you’re not using transparency
+in this color.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Alpha component of the color (0-255)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-type docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+<p>See also: <a class="reference internal" href="#painto.color.Color.rgb" title="painto.color.Color.rgb"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rgb</span></code></a>, <a class="reference internal" href="#painto.color.Color.rgb" title="painto.color.Color.rgb"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rgb</span></code></a>, <a class="reference internal" href="#painto.color.Color.r" title="painto.color.Color.r"><code class="xref py py-attr docutils literal notranslate"><span class="pre">r</span></code></a>, <a class="reference internal" href="#painto.color.Color.g" title="painto.color.Color.g"><code class="xref py py-attr docutils literal notranslate"><span class="pre">g</span></code></a>, <a class="reference internal" href="#painto.color.Color.b" title="painto.color.Color.b"><code class="xref py py-attr docutils literal notranslate"><span class="pre">b</span></code></a></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="painto.color.Color.hex">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hex</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#painto.color.Color.hex" title="Link to this definition">¶</a></dt>
+<dd><p>Return the color as a hex string. See also <a class="reference internal" href="#painto.color.Color.name" title="painto.color.Color.name"><code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code></a>.</p>
+<dl class="field-list">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The color as a hex string.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">choco</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">milkchocolate</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">choco</span><span class="o">.</span><span class="n">hex</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">#7F4E1E</span></code> <img alt="7F4E1E" src="_images/7F4E1E.png" /></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="painto.color.Color.name">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#painto.color.Color.name" title="Link to this definition">¶</a></dt>
+<dd><p>Return the friendly name if it exists, otherwise the hex value.
+See also <a class="reference internal" href="#painto.color.Color.hex" title="painto.color.Color.hex"><code class="xref py py-attr docutils literal notranslate"><span class="pre">hex</span></code></a>.</p>
+<dl class="field-list">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The color as a friendly name or hex string.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-type docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color1</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="s2">&quot;#4a0100&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">color1</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">mahogany</span></code> <img alt="mahogany" src="_images/4A0100.png" /></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color2</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="s2">&quot;#6589E7&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">color2</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">#6589E7</span></code> <img alt="6589E7" src="_images/6589E7.png" /></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="painto.color.Color.web">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">web</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#painto.color.Color.web" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the color as a web color string.</p>
+<p>This returns the color as a string that can be used in HTML, CSS, and other
+web-based contexts. Specifically, it tries to return the shortest string that
+can still be used to identify the color. These rules are:</p>
+<ul class="simple">
+<li><p>Start with the hex code of the color (<code class="docutils literal notranslate"><span class="pre">#RRGGBB</span></code>)</p></li>
+<li><p>Use the hex short code (<code class="docutils literal notranslate"><span class="pre">#RGB</span></code>) if it can work for this color. This works if
+all three values are matching character pairs, e.g. <code class="docutils literal notranslate"><span class="pre">#AA2200</span></code> <img alt="AA2200" src="_images/AA2200.png" /> becomes 
+<code class="docutils literal notranslate"><span class="pre">#A20</span></code> <img alt="AA2200" src="_images/AA2200.png" />, or <code class="docutils literal notranslate"><span class="pre">#CC11BB</span></code> <img alt="CC11BB" src="_images/CC11BB.png" /> becomes <code class="docutils literal notranslate"><span class="pre">#C1B</span></code> <img alt="CC11BB" src="_images/CC11BB.png" />.</p></li>
+<li><p>If the color has a <code class="xref py py-attr docutils literal notranslate"><span class="pre">painto.w3c</span></code> name, use the name only if it’s equal or shorter than
+the hex code. This can sometimes be shorter than the short hex code (<code class="docutils literal notranslate"><span class="pre">red</span></code>), but
+without a short code, it will replace the hex code if the name is 7-characters or less.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">aquamarine</span></code> becomes <code class="docutils literal notranslate"><span class="pre">#7FFFD4</span></code> <img alt="7FFFD4" src="_images/7FFFD4.png" /></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">#FF0000</span></code> <img alt="red" src="_images/FF0000.png" /> becomes <code class="docutils literal notranslate"><span class="pre">red</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fuchsia</span></code> becomes <code class="docutils literal notranslate"><span class="pre">#F0F</span></code> <img alt="FF00FF" src="_images/FF00FF.png" /></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The color as a web color string (<code class="docutils literal notranslate"><span class="pre">#RRGGBB</span></code> or <code class="docutils literal notranslate"><span class="pre">name</span></code> or <code class="docutils literal notranslate"><span class="pre">#RGB</span></code>)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-type docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="painto.color.Color.foreground">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">foreground</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><span class="pre">Color</span></a></em><a class="headerlink" href="#painto.color.Color.foreground" title="Link to this definition">¶</a></dt>
+<dd><p>Presuming self is the background color, return a contrasting
+foreground <a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><code class="xref py py-type docutils literal notranslate"><span class="pre">Color</span></code></a> for foregound text. Will return black or white, 
+whichever is more visible on the background.</p>
+<dl class="field-list">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A <a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><code class="xref py py-type docutils literal notranslate"><span class="pre">Color</span></code></a> object with the foreground color.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><code class="xref py py-type docutils literal notranslate"><span class="pre">Color</span></code></a> (either black or white)</p>
+</dd>
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">merlot</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">merlot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">merlot</span><span class="o">.</span><span class="n">foreground</span><span class="p">)</span>
+<span class="go">white</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="painto.color.Color.ansi_escape">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ansi_escape</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#painto.color.Color.ansi_escape" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the ANSI escape sequence for setting text color in the console. Be
+sure to use the <a class="reference internal" href="#painto.color.Color.ansi_reset" title="painto.color.Color.ansi_reset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ansi_reset()</span></code></a> to reset the color after the text or the color
+change will persist until the next color change onto future lines.</p>
+<p>See <a class="reference internal" href="usage.html#terminalcolors"><span class="std std-ref">The Terminal</span></a> for more information on using colors in the terminal.</p>
+<dl class="field-list">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ANSI escape sequence that sets text foreground color to this color</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-type docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">red</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">red</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">red</span><span class="o">.</span><span class="n">ansi_escape</span><span class="si">}</span><span class="s2">This text is red</span><span class="si">{</span><span class="n">red</span><span class="o">.</span><span class="n">ansi_reset</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre><font color="red">This text is red</font></pre></dd>
+<dt class="field-even">Note<span class="colon">:</span></dt>
+<dd class="field-even"><p>Combine this with <a class="reference internal" href="#painto.color.Color.ansi_escape_bg" title="painto.color.Color.ansi_escape_bg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ansi_escape_bg()</span></code></a> to set a background color and text color:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">red</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">red</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">black</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">black</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">red</span><span class="o">.</span><span class="n">ansi_escape_bg</span><span class="si">}{</span><span class="n">black</span><span class="o">.</span><span class="n">ansi_escape</span><span class="si">}</span><span class="s2">Black on red</span><span class="si">{</span><span class="n">red</span><span class="o">.</span><span class="n">ansi_reset</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre><span style="color:#000;background-color:#F00;">Black on red</span></pre></dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="painto.color.Color.ansi_escape_bg">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ansi_escape_bg</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#painto.color.Color.ansi_escape_bg" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the ANSI escape sequence for setting the background color in the console. Be
+sure to use the <a class="reference internal" href="#painto.color.Color.ansi_reset" title="painto.color.Color.ansi_reset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ansi_reset()</span></code></a> to reset the color after the text or the color
+change will persist until the next color change onto future lines.</p>
+<p>See <a class="reference internal" href="usage.html#terminalcolors"><span class="std std-ref">The Terminal</span></a> for more information on using colors in the terminal.</p>
+<dl class="field-list">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ANSI escape sequence that sets text background color to this color</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-type docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">red</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">red</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">red</span><span class="o">.</span><span class="n">ansi_escape_bg</span><span class="si">}</span><span class="s2">Text on a red background</span><span class="si">{</span><span class="n">red</span><span class="o">.</span><span class="n">ansi_reset</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre><span style="background-color:#F00;">Text on a red background</span></pre></dd>
+<dt class="field-even">Note<span class="colon">:</span></dt>
+<dd class="field-even"><p>Combine this with <a class="reference internal" href="#painto.color.Color.ansi_escape" title="painto.color.Color.ansi_escape"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ansi_escape()</span></code></a> to set a background color and text color:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">red</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">red</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">white</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">white</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">red</span><span class="o">.</span><span class="n">ansi_escape_bg</span><span class="si">}{</span><span class="n">white</span><span class="o">.</span><span class="n">ansi_escape</span><span class="si">}</span><span class="s2">White on red</span><span class="si">{</span><span class="n">red</span><span class="o">.</span><span class="n">ansi_reset</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre><span style="color:#FFF;background-color:#F00;">White on red</span></pre></dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="painto.color.Color.ansi_reset">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ansi_reset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#painto.color.Color.ansi_reset" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the ANSI escape sequence to reset colors.
+This is the same for all colors, so it’s just a convenient alias. Without putting
+this in your console output the colors will persist until the next color change
+onto future lines.</p>
+<p>See <a class="reference internal" href="usage.html#terminalcolors"><span class="std std-ref">The Terminal</span></a> for more information on using colors in the terminal.</p>
+<dl class="field-list">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ANSI escape sequence that resets all terminal colors to default. (<code class="docutils literal notranslate"><span class="pre">&lt;ESC&gt;[0m</span></code>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-type docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sunny</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">sunnyyellow</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sunny</span><span class="o">.</span><span class="n">ansi_escape_bg</span><span class="si">}</span><span class="s2">Always reset your colors</span><span class="si">{</span><span class="n">sunny</span><span class="o">.</span><span class="n">ansi_reset</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<pre><span style="background-color:#fff917;">Always reset your colors</span></pre></dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="painto.color.Color.console">
+<span class="sig-name descname"><span class="pre">console</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><span class="pre">Color</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/painto/color.html#Color.console"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#painto.color.Color.console" title="Link to this definition">¶</a></dt>
+<dd><p>Wraps text with ANSI escape sequences to display it in this <a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><code class="xref py py-type docutils literal notranslate"><span class="pre">Color</span></code></a> as the
+foreground/text color. This function also wraps the text with the reset to
+put the colors back to normal after the text.</p>
+<p>See <a class="reference internal" href="usage.html#terminalcolors"><span class="std std-ref">The Terminal</span></a> for more information on using colors in the terminal.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<code class="xref py py-type docutils literal notranslate"><span class="pre">str</span></code>) – The text to colorize.</p></li>
+<li><p><strong>background</strong> (<a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><code class="xref py py-type docutils literal notranslate"><span class="pre">Color</span></code></a>) – The background color to use. If not provided, the background will be left</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The text wrapped with ANSI escape sequences to display in this color.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-type docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+<dt class="field-even">Example<span class="colon">:</span></dt>
+<dd class="field-even"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">purple</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">royalpurple</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">red</span><span class="o">.</span><span class="n">console</span><span class="p">(</span><span class="s2">&quot;This text is royal purple&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre><font color="#4b006e">This text is royal purple</font></pre></dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="painto.color.Color.console_bg">
+<span class="sig-name descname"><span class="pre">console_bg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/painto/color.html#Color.console_bg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#painto.color.Color.console_bg" title="Link to this definition">¶</a></dt>
+<dd><p>Wraps text with ANSI escape sequences to display it with this as the
+background <a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><code class="xref py py-type docutils literal notranslate"><span class="pre">Color</span></code></a>.</p>
+<p>The text <a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><code class="xref py py-type docutils literal notranslate"><span class="pre">Color</span></code></a> will be automatically set to either black or white depending on
+the background <a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><code class="xref py py-type docutils literal notranslate"><span class="pre">Color</span></code></a>’s luminosity for best contrast.</p>
+<p>See <a class="reference internal" href="usage.html#terminalcolors"><span class="std std-ref">The Terminal</span></a> for more information on using colors in the terminal.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<code class="xref py py-type docutils literal notranslate"><span class="pre">str</span></code>) – The text to display on the colored background.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The text wrapped with ANSI escape sequences for background and foreground colors.</p>
+</dd>
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">blue</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">nightblue</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">blue</span><span class="o">.</span><span class="n">console_bg</span><span class="p">(</span><span class="s2">&quot;Dark background will have white text&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre><span style="color:#FFF;background-color:#040348;">Dark background will have white text</span></pre><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">blue</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">neonblue</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">blue</span><span class="o">.</span><span class="n">console_bg</span><span class="p">(</span><span class="s2">&quot;Light background will have black text&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre><span style="color:#000;background-color:#04d9ff;">Light background will have black text</span></pre></dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="painto.color.name_lookup">
+<span class="sig-prename descclassname"><span class="pre">painto.color.</span></span><span class="sig-name descname"><span class="pre">name_lookup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color_to_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><span class="pre">Color</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/painto/color.html#name_lookup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#painto.color.name_lookup" title="Link to this definition">¶</a></dt>
+<dd><p>Looks up a human-readable name for a <a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><code class="xref py py-type docutils literal notranslate"><span class="pre">Color</span></code></a> using the
+<a class="reference external" href="https://color.pizza">color.pizza</a> <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> API.</p>
+<p>Makes a request to the <code class="docutils literal notranslate"><span class="pre">color.pizza</span></code> API to find the closest named color match
+for the given <a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><code class="xref py py-type docutils literal notranslate"><span class="pre">Color</span></code></a>.</p>
+<p>See <a class="reference internal" href="usage.html#newcolornames"><span class="std std-ref">New Color Names</span></a> for detail about new color name lookups, or
+<a class="reference internal" href="#painto.color.enable_dynamic_name_lookup" title="painto.color.enable_dynamic_name_lookup"><code class="xref py py-meth docutils literal notranslate"><span class="pre">enable_dynamic_name_lookup()</span></code></a> and <a class="reference internal" href="#painto.color.disable_dynamic_name_lookup" title="painto.color.disable_dynamic_name_lookup"><code class="xref py py-meth docutils literal notranslate"><span class="pre">disable_dynamic_name_lookup()</span></code></a> about changing
+the default behavior about automatically looking up color names.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>color_to_name</strong> (<a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><code class="xref py py-type docutils literal notranslate"><span class="pre">Color</span></code></a>) – The <a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><code class="xref py py-type docutils literal notranslate"><span class="pre">Color</span></code></a> object to find a name for</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The suggested name for the color from the API, or “unknown” if the
+API request fails</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><code class="xref py py-type docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+<dt class="field-even">Example<span class="colon">:</span></dt>
+<dd class="field-even"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">new_color</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">random_color</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">painto</span><span class="o">.</span><span class="n">name_lookup</span><span class="p">(</span><span class="n">new_color</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="field-list simple">
+<dt class="field-odd">exception ImportError<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If the <a class="reference external" href="https://docs.python-requests.org/en/latest/">requests</a>         library is not available.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Here is an <a class="reference external" href="https://felixluginbuhl.com/colornames/reference/get_color_colorpizza.html">overview of the color.pizza API</a></p>
+</aside>
+</aside>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="painto.color.random_color">
+<span class="sig-prename descclassname"><span class="pre">painto.color.</span></span><span class="sig-name descname"><span class="pre">random_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><span class="pre">Color</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><span class="pre">Color</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/painto/color.html#random_color"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#painto.color.random_color" title="Link to this definition">¶</a></dt>
+<dd><p>Generates random color(s) with RGB values between 0-255.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>count</strong> (<em>int</em>) – Number of random colors to generate. Defaults to 1.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A single random Color object or a list of random Color objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#painto.color.Color" title="painto.color.Color">Color</a> or list[<a class="reference internal" href="#painto.color.Color" title="painto.color.Color">Color</a>]</p>
+</dd>
+<dt class="field-even">Example<span class="colon">:</span></dt>
+<dd class="field-even"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">random_color</span><span class="p">()</span>  <span class="c1"># Get a single random color</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">hex</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">#6589E7</span></code> <img alt="6589E7" src="_images/6589E7.png" /></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">colors</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">random_color</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># Get 5 random colors</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">color</span> <span class="ow">in</span> <span class="n">colors</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">hex</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">#9ADE8A</span></code> <img alt="9ADE8A" src="_images/9ADE8A.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">#F2F578</span></code> <img alt="F2F578" src="_images/F2F578.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">#633149</span></code> <img alt="633149" src="_images/633149.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">#9313C0</span></code> <img alt="9313C0" src="_images/9313C0.png" /></p>
+<p><code class="docutils literal notranslate"><span class="pre">#83E2A4</span></code> <img alt="83E2A4" src="_images/83E2A4.png" /></p>
+</dd>
+</dl>
+<p>If you’re wanting a random color or colors from a specific color list,
+see <code class="xref py py-meth docutils literal notranslate"><span class="pre">ColorList.random()</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="painto.color.sort_by_hue">
+<span class="sig-prename descclassname"><span class="pre">painto.color.</span></span><span class="sig-name descname"><span class="pre">sort_by_hue</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/painto/color.html#sort_by_hue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#painto.color.sort_by_hue" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the global color sorting method to sort by hue.</p>
+<p>This function changes the global sorting option to sort colors by their hue
+(rainbow) order. The default is to sort by luminosity/brightness. To change
+back to sorting by luminosity, call <a class="reference internal" href="#painto.color.sort_by_luminosity" title="painto.color.sort_by_luminosity"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sort_by_luminosity()</span></code></a>.</p>
+<p>See also <a class="reference internal" href="usage.html#sortingcolors"><span class="std std-ref">Sorting Colors</span></a> for examples and details on sorting.</p>
+<p><img alt="hues" src="_images/hue_colors.png" /></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="painto.color.sort_by_luminosity">
+<span class="sig-prename descclassname"><span class="pre">painto.color.</span></span><span class="sig-name descname"><span class="pre">sort_by_luminosity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/painto/color.html#sort_by_luminosity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#painto.color.sort_by_luminosity" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the global color sorting method to sort by luminosity/brightness.</p>
+<p>This function changes the global sorting option to sort colors by their
+luminosity value. This is the default sorting method.</p>
+<p>You can change to sort by hue (rainbow) by calling <a class="reference internal" href="#painto.color.sort_by_hue" title="painto.color.sort_by_hue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sort_by_hue()</span></code></a>.</p>
+<p>See also <a class="reference internal" href="usage.html#sortingcolors"><span class="std std-ref">Sorting Colors</span></a> for examples and details on sorting.</p>
+<p><img alt="lumin" src="_images/lumin_colors.png" /></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="painto.color.sorting_by">
+<span class="sig-prename descclassname"><span class="pre">painto.color.</span></span><span class="sig-name descname"><span class="pre">sorting_by</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/painto/color.html#sorting_by"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#painto.color.sorting_by" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the current global color sorting method.</p>
+<p>See also <a class="reference internal" href="usage.html#sortingcolors"><span class="std std-ref">Sorting Colors</span></a> for examples and details on sorting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The name of the current sorting method (‘hue’ or ‘luminosity’)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-type docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="painto.color.disable_dynamic_name_lookup">
+<span class="sig-prename descclassname"><span class="pre">painto.color.</span></span><span class="sig-name descname"><span class="pre">disable_dynamic_name_lookup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/painto/color.html#disable_dynamic_name_lookup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#painto.color.disable_dynamic_name_lookup" title="Link to this definition">¶</a></dt>
+<dd><p>Disables dynamic name lookup.</p>
+<p>When dynamic name lookup is disabled, the name will return as the hex value
+if it isn’t in one of the color_list sets. This is the default behavior.</p>
+<p>See also <a class="reference internal" href="usage.html#newcolornames"><span class="std std-ref">New Color Names</span></a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="painto.color.enable_dynamic_name_lookup">
+<span class="sig-prename descclassname"><span class="pre">painto.color.</span></span><span class="sig-name descname"><span class="pre">enable_dynamic_name_lookup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/painto/color.html#enable_dynamic_name_lookup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#painto.color.enable_dynamic_name_lookup" title="Link to this definition">¶</a></dt>
+<dd><p>Sets whether dynamic name lookup is enabled.</p>
+<p>When dynamic name lookup is enabled, if a color’s name isn’t known when
+using color.name, it will be looked up using the <code class="docutils literal notranslate"><span class="pre">color.pizza</span></code> API. With this
+disabled (the default), the name will return as the hex value.</p>
+<p>See also <a class="reference internal" href="usage.html#newcolornames"><span class="std std-ref">New Color Names</span></a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Use this with care. It will slow any access to <a class="reference internal" href="#painto.color.Color.name" title="painto.color.Color.name"><code class="xref py py-attr docutils literal notranslate"><span class="pre">.name</span></code></a> that isn’t known
+and cached.</p>
+</div>
+<dl class="field-list">
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">new_color</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="s2">&quot;#946A87&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">new_color</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">#946A87</span></code> <img alt="946A87" src="_images/946A87.png" /></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">painto</span><span class="o">.</span><span class="n">enable_dynamic_name_lookup</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">new_color</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Fruit</span> <span class="pre">of</span> <span class="pre">Passion</span></code> <img alt="946A87" src="_images/946A87.png" /></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="painto.color.dynamic_name_lookup_enabled">
+<span class="sig-prename descclassname"><span class="pre">painto.color.</span></span><span class="sig-name descname"><span class="pre">dynamic_name_lookup_enabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/painto/color.html#dynamic_name_lookup_enabled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#painto.color.dynamic_name_lookup_enabled" title="Link to this definition">¶</a></dt>
+<dd><p>Returns whether dynamic name lookup is currently enabled. Change this
+with <a class="reference internal" href="#painto.color.enable_dynamic_name_lookup" title="painto.color.enable_dynamic_name_lookup"><code class="xref py py-meth docutils literal notranslate"><span class="pre">enable_dynamic_name_lookup()</span></code></a> or <a class="reference internal" href="#painto.color.disable_dynamic_name_lookup" title="painto.color.disable_dynamic_name_lookup"><code class="xref py py-meth docutils literal notranslate"><span class="pre">disable_dynamic_name_lookup()</span></code></a>.</p>
+<p>See also <a class="reference internal" href="usage.html#newcolornames"><span class="std std-ref">New Color Names</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if dynamic name lookup is enabled, False otherwise.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="xref py py-type docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class" id="module-painto.color_list">
+<dt class="sig sig-object py" id="painto.color_list.ColorList">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">painto.color_list.</span></span><span class="sig-name descname"><span class="pre">ColorList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/painto/color_list.html#ColorList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#painto.color_list.ColorList" title="Link to this definition">¶</a></dt>
+<dd><p>A collection of Color objects to create a named collection (e.g. w3c, xkcd, etc.)</p>
+<p>This class extends the built-in dict class to provide a convenient way to store and access
+Color objects. The colors can be accessed both as dictionary items and as attributes.</p>
+<dl class="field-list">
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">colors</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">w3c</span>  <span class="c1"># One of the built-in color lists.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">color</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>  <span class="c1"># Returns a single random color from the w3c list.</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_colors</span> <span class="o">=</span> <span class="n">ColorList</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s2">&quot;red&quot;</span><span class="p">:</span> <span class="n">Color</span><span class="p">(</span><span class="s2">&quot;#e40303&quot;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="s2">&quot;orange&quot;</span><span class="p">:</span> <span class="n">Color</span><span class="p">(</span><span class="s2">&quot;#ff8c00&quot;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="s2">&quot;yellow&quot;</span><span class="p">:</span> <span class="n">Color</span><span class="p">(</span><span class="s2">&quot;#ffed00&quot;</span><span class="p">),</span>
+<span class="gp">... </span><span class="o">...</span>
+<span class="gp">... </span><span class="p">})</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_colors</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># Returns a list of 3 random colors.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_colors</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>  <span class="c1"># Returns a single random color from the list.</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Most use cases won’t ever need to create your own list - this class mainly
+exists to give easier access to the built-in color lists. See <a class="reference internal" href="usage.html#colorlists"><span class="std std-ref">Working With Lists of colors</span></a>
+for the lists and how to use them.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="painto.color_list.ColorList.random">
+<span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><span class="pre">Color</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#painto.color.Color" title="painto.color.Color"><span class="pre">Color</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/painto/color_list.html#ColorList.random"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#painto.color_list.ColorList.random" title="Link to this definition">¶</a></dt>
+<dd><p>Returns random color(s) from this color list.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>count (int, optional): Number of random colors to return. Defaults to 1.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Color: If count==1, returns a single Color object.
+list[Color]: If count&gt;1, returns a list of Color objects.</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If count is greater than the number of available colors.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="painto.color_list.painto.transparent">
+<span class="sig-prename descclassname"><span class="pre">painto.</span></span><span class="sig-name descname"><span class="pre">transparent</span></span><a class="headerlink" href="#painto.color_list.painto.transparent" title="Link to this definition">¶</a></dt>
+<dd><p>This is a <code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code> object that represents the color <code class="docutils literal notranslate"><span class="pre">#00000000</span></code> (fully transparent).
+It can be used as a placename for transparent backgrounds or similar. Any color that ends up
+with an alpha value of 0 will be treated as transparent.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="painto.color_list.painto.rainbow">
+<span class="sig-prename descclassname"><span class="pre">painto.</span></span><span class="sig-name descname"><span class="pre">rainbow</span></span><a class="headerlink" href="#painto.color_list.painto.rainbow" title="Link to this definition">¶</a></dt>
+<dd><p>This is a <a class="reference internal" href="#painto.color_list.ColorList" title="painto.color_list.ColorList"><code class="xref py py-class docutils literal notranslate"><span class="pre">ColorList</span></code></a> of the colors in traditional rainbow order: <code class="docutils literal notranslate"><span class="pre">red</span></code> <img alt="E50000" src="_images/E50000.png" /> , <code class="docutils literal notranslate"><span class="pre">orange</span></code> <img alt="F97306" src="_images/F97306.png" />,
+<code class="docutils literal notranslate"><span class="pre">yellow</span></code> <img alt="FFFF14" src="_images/FFFF14.png" />, <code class="docutils literal notranslate"><span class="pre">green</span></code> <img alt="15B01A" src="_images/15B01A.png" />, <code class="docutils literal notranslate"><span class="pre">blue</span></code> <img alt="0343DF" src="_images/0343DF.png" />,
+<code class="docutils literal notranslate"><span class="pre">indigo</span></code> <img alt="380282" src="_images/380282.png" />, <code class="docutils literal notranslate"><span class="pre">violet</span></code> <img alt="9A0EEA" src="_images/9A0EEA.png" /> (ROYGBIV).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="painto.color_list.painto.pride">
+<span class="sig-prename descclassname"><span class="pre">painto.</span></span><span class="sig-name descname"><span class="pre">pride</span></span><a class="headerlink" href="#painto.color_list.painto.pride" title="Link to this definition">¶</a></dt>
+<dd><p>This is a <a class="reference internal" href="#painto.color_list.ColorList" title="painto.color_list.ColorList"><code class="xref py py-class docutils literal notranslate"><span class="pre">ColorList</span></code></a> of the colors based on the Pride flag <a class="footnote-reference brackets" href="#pride" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>. Because the Pride flag
+uses common colors for their flag, if you want to use these specific colors, you’ll generally
+want to use the full name to the color (<code class="docutils literal notranslate"><span class="pre">painto.pride.red</span></code>) instead of the short name
+(<code class="docutils literal notranslate"><span class="pre">painto.red</span></code>).</p>
+</dd></dl>
+
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="pride" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">2</a><span class="fn-bracket">]</span></span>
+<p>As taken from <a class="reference external" href="https://www.flagcolorcodes.com/pride-rainbow">https://www.flagcolorcodes.com/pride-rainbow</a> .</p>
+</aside>
+</aside>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="painto.color_list.painto.w3c">
+<span class="sig-prename descclassname"><span class="pre">painto.</span></span><span class="sig-name descname"><span class="pre">w3c</span></span><a class="headerlink" href="#painto.color_list.painto.w3c" title="Link to this definition">¶</a></dt>
+<dd><p>This is a <a class="reference internal" href="#painto.color_list.ColorList" title="painto.color_list.ColorList"><code class="xref py py-class docutils literal notranslate"><span class="pre">ColorList</span></code></a> of the colors based on the W3C color names.</p>
+<p>The W3C color names are a list of colors that are used in the W3C specification, allowing
+convient use with HTML and CSS. When working with a <code class="xref py py-class docutils literal notranslate"><span class="pre">Color</span></code>, you can return a
+reliable HTML friendly code (either name or hex code) by using <code class="xref py py-attr docutils literal notranslate"><span class="pre">Color.web</span></code>.</p>
+<p>The full list of w3c colors are available here: <a class="reference external" href="https://www.w3schools.com/colors/colors_names.asp">https://www.w3schools.com/colors/colors_names.asp</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For consistency, all <strong>🎨painto</strong> colors are all lower case. The colors names are not
+case sensitive in CSS, so this won’t impact their use.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="painto.color_list.painto.xkcd">
+<span class="sig-prename descclassname"><span class="pre">painto.</span></span><span class="sig-name descname"><span class="pre">xkcd</span></span><a class="headerlink" href="#painto.color_list.painto.xkcd" title="Link to this definition">¶</a></dt>
+<dd><p>XKCD color survey collection.</p>
+<p>This is a <a class="reference internal" href="#painto.color_list.ColorList" title="painto.color_list.ColorList"><code class="xref py py-class docutils literal notranslate"><span class="pre">ColorList</span></code></a> of the colors based on the XKCD color survey. This dataset contains
+colors with descriptive names that were crowdsourced from the XKCD community,
+providing a rich palette of human-named colors.</p>
+<p>The colors in this collection include:</p>
+<ul class="simple">
+<li><p>Common color names (red, blue, green, etc.)</p></li>
+<li><p>Descriptive color names (baby blue, blood red, etc.)</p></li>
+<li><p>Humorous or colloquial names (barf green, baby poop, etc.)</p></li>
+<li><p>Technical color names (azure, aquamarine, etc.)</p></li>
+</ul>
+<p>This collection is particularly useful for:</p>
+<ul class="simple">
+<li><p>Natural language color processing</p></li>
+<li><p>User-friendly color selection interfaces</p></li>
+<li><p>Data visualization with human-readable color names</p></li>
+<li><p>Applications requiring descriptive color names</p></li>
+</ul>
+<p>License: Creative Commons Zero 1.0 (Public Domain)
+Source: XKCD Color Survey (<a class="reference external" href="https://xkcd.com/color/rgb/">https://xkcd.com/color/rgb/</a>)</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Due to the naming conventions used with <strong>🎨painto</strong>, some color names had to
+be changed since things like spaces don’t work well as attribute names.</p>
+<p>All XKCD names, then, were changed to all lower case, and spaces were removed,
+making “sunflower yellow” become “sunfloweryellow”, for example.</p>
+<p>This had the unforunate side effect of causing some naming collisions since
+the list had a distinct “<code class="docutils literal notranslate"><span class="pre">green</span> <span class="pre">blue</span></code>” and “<code class="docutils literal notranslate"><span class="pre">greenblue</span></code>” color in the list and
+similar naming collisions. These were all kept, but names of collisions became
+“<code class="docutils literal notranslate"><span class="pre">greenblue</span></code>” and “<code class="docutils literal notranslate"><span class="pre">greenblue2</span></code>” so if you came across the hex code, it would still
+have a name.</p>
+</div>
+<dl class="field-list">
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># get 10 random colors with names vs just random r,g,b values</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">colors</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">xkcd</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">colors</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">console_bg</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">API</a><ul>
+<li><a class="reference internal" href="#painto.color.Color"><code class="docutils literal notranslate"><span class="pre">Color</span></code></a><ul>
+<li><a class="reference internal" href="#painto.color.Color.rgba"><code class="docutils literal notranslate"><span class="pre">Color.rgba</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.Color.rgb"><code class="docutils literal notranslate"><span class="pre">Color.rgb</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.Color.r"><code class="docutils literal notranslate"><span class="pre">Color.r</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.Color.g"><code class="docutils literal notranslate"><span class="pre">Color.g</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.Color.b"><code class="docutils literal notranslate"><span class="pre">Color.b</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.Color.a"><code class="docutils literal notranslate"><span class="pre">Color.a</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.Color.hex"><code class="docutils literal notranslate"><span class="pre">Color.hex</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.Color.name"><code class="docutils literal notranslate"><span class="pre">Color.name</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.Color.web"><code class="docutils literal notranslate"><span class="pre">Color.web</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.Color.foreground"><code class="docutils literal notranslate"><span class="pre">Color.foreground</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.Color.ansi_escape"><code class="docutils literal notranslate"><span class="pre">Color.ansi_escape</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.Color.ansi_escape_bg"><code class="docutils literal notranslate"><span class="pre">Color.ansi_escape_bg</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.Color.ansi_reset"><code class="docutils literal notranslate"><span class="pre">Color.ansi_reset</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.Color.console"><code class="docutils literal notranslate"><span class="pre">Color.console()</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.Color.console_bg"><code class="docutils literal notranslate"><span class="pre">Color.console_bg()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#painto.color.name_lookup"><code class="docutils literal notranslate"><span class="pre">name_lookup()</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.random_color"><code class="docutils literal notranslate"><span class="pre">random_color()</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.sort_by_hue"><code class="docutils literal notranslate"><span class="pre">sort_by_hue()</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.sort_by_luminosity"><code class="docutils literal notranslate"><span class="pre">sort_by_luminosity()</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.sorting_by"><code class="docutils literal notranslate"><span class="pre">sorting_by()</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.disable_dynamic_name_lookup"><code class="docutils literal notranslate"><span class="pre">disable_dynamic_name_lookup()</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.enable_dynamic_name_lookup"><code class="docutils literal notranslate"><span class="pre">enable_dynamic_name_lookup()</span></code></a></li>
+<li><a class="reference internal" href="#painto.color.dynamic_name_lookup_enabled"><code class="docutils literal notranslate"><span class="pre">dynamic_name_lookup_enabled()</span></code></a></li>
+<li><a class="reference internal" href="#painto.color_list.ColorList"><code class="docutils literal notranslate"><span class="pre">ColorList</span></code></a><ul>
+<li><a class="reference internal" href="#painto.color_list.ColorList.random"><code class="docutils literal notranslate"><span class="pre">ColorList.random()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#painto.color_list.painto.transparent"><code class="docutils literal notranslate"><span class="pre">painto.transparent</span></code></a></li>
+<li><a class="reference internal" href="#painto.color_list.painto.rainbow"><code class="docutils literal notranslate"><span class="pre">painto.rainbow</span></code></a></li>
+<li><a class="reference internal" href="#painto.color_list.painto.pride"><code class="docutils literal notranslate"><span class="pre">painto.pride</span></code></a></li>
+<li><a class="reference internal" href="#painto.color_list.painto.w3c"><code class="docutils literal notranslate"><span class="pre">painto.w3c</span></code></a></li>
+<li><a class="reference internal" href="#painto.color_list.painto.xkcd"><code class="docutils literal notranslate"><span class="pre">painto.xkcd</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="usage.html"
+                          title="previous chapter">Usage Guide</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/api.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Usage Guide"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">painto 0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">API</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025, Michael Knowles.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

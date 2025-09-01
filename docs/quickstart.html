@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Quick Start &#8212; painto 0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css?v=279e0f84" />
+    <script src="_static/documentation_options.js?v=b489f392"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="_static/hexagon_rainbow.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage Guide" href="usage.html" />
+    <link rel="prev" title="🎨painto documentation" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Usage Guide"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="🎨painto documentation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">painto 0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Quick Start</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="quick-start">
+<span id="quickstart"></span><h1>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading">¶</a></h1>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(.venv)</span> <span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>painto
+</pre></div>
+</div>
+</section>
+<section id="basic-usage">
+<h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">painto</span>
+
+<span class="c1"># Create colors from names, hex, or RGB values</span>
+<span class="n">red</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">red</span>
+<span class="n">blue</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="s2">&quot;#0000FF&quot;</span><span class="p">)</span>
+<span class="n">green</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">transparent</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">transparent</span>
+
+<span class="c1"># Basic color properties</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">red</span><span class="o">.</span><span class="n">hex</span><span class="p">)</span>        <span class="c1"># &quot;#FF0000&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">red</span><span class="o">.</span><span class="n">rgb</span><span class="p">)</span>        <span class="c1"># (255, 0, 0)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">red</span><span class="o">.</span><span class="n">hsv</span><span class="p">)</span>        <span class="c1"># (0.0, 1.0, 1.0)</span>
+
+<span class="c1"># Color arithmetic</span>
+<span class="n">purple</span> <span class="o">=</span> <span class="n">red</span> <span class="o">+</span> <span class="n">blue</span>
+<span class="n">darker_red</span> <span class="o">=</span> <span class="n">red</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="n">lighter_blue</span> <span class="o">=</span> <span class="n">blue</span> <span class="o">*</span> <span class="mi">2</span>
+
+<span class="c1"># Generate color ranges</span>
+<span class="n">gradient</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">panto</span><span class="o">.</span><span class="n">color_range</span><span class="p">(</span><span class="n">red</span><span class="p">,</span> <span class="n">blue</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="choosing-colors">
+<h2>Choosing Colors<a class="headerlink" href="#choosing-colors" title="Link to this heading">¶</a></h2>
+<p>All color names from w3c/css, the XKCD color list, and others are available:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># From color names</span>
+<span class="n">red</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">red</span>
+<span class="n">blue</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">blue</span>
+</pre></div>
+</div>
+<p>In some cases, the same color name (e.g. red) is in multiple lists. If you want
+a color from a specific list, you can do so by using the list name:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">red</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">red</span>  <span class="c1"># Returns w3c red of #FF0000</span>
+<span class="n">red</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">xkcd</span><span class="o">.</span><span class="n">red</span>  <span class="c1"># XKCD red is #E50000</span>
+</pre></div>
+</div>
+</section>
+<section id="random-colors">
+<h2>Random Colors<a class="headerlink" href="#random-colors" title="Link to this heading">¶</a></h2>
+<p>You can generate a random color from the w3c, xkcd, or other lists:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">new_color</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">random_color</span><span class="p">()</span>  <span class="c1"># a random color from the entire color space</span>
+<span class="n">new_w3c_color</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">w3c</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>  <span class="c1"># a random color from the w3c list</span>
+<span class="n">new_xkcd_color</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">xkcd</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>  <span class="c1"># a random color from the xkcd list</span>
+
+<span class="n">new_colors</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">xkcd</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># will return a list of colors from the list</span>
+</pre></div>
+</div>
+</section>
+<section id="console-usage">
+<h2>Console Usage<a class="headerlink" href="#console-usage" title="Link to this heading">¶</a></h2>
+<p>For easy coloring for console output:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">red</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">red</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">red</span><span class="o">.</span><span class="n">console</span><span class="p">(</span><span class="s2">&quot;Red text&quot;</span><span class="p">))</span>
+
+<span class="n">yellow</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">yellow</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">yellow</span><span class="o">.</span><span class="n">console_bg</span><span class="p">(</span><span class="s2">&quot;Yellow background&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre><span style="color:#f00">Red text</span><br>
+<span style="color:#000;background-color:#FF0;">Yellow background</span></pre><dl class="simple">
+<dt>Note:</dt><dd><p>With <a class="reference internal" href="api.html#painto.color.Color.console_bg" title="painto.color.Color.console_bg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">console_bg()</span></code></a>, the text color is automatically chosen to be white
+or black, depending on which is more contrasting with the background color.</p>
+</dd>
+</dl>
+</section>
+<section id="color-properties">
+<h2>Color Properties<a class="headerlink" href="#color-properties" title="Link to this heading">¶</a></h2>
+<p>You can get the properties of a color:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">color</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">orange</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="n">color</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">color</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">color</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>  <span class="c1"># 255 165 0 255</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">hex</span><span class="p">)</span>                            <span class="c1"># &quot;#FFA500&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>                           <span class="c1"># &quot;orange&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">luminosity</span><span class="p">)</span>                     <span class="c1"># 0.696</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">hsv</span><span class="p">)</span>                            <span class="c1"># (0.108, 1.0, 255)</span>
+</pre></div>
+</div>
+</section>
+<section id="color-operations">
+<h2>Color Operations<a class="headerlink" href="#color-operations" title="Link to this heading">¶</a></h2>
+<p>You can perform arithmetic operations on colors:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">red</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">red</span>
+<span class="n">blue</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">blue</span>
+
+<span class="c1"># Blend colors</span>
+<span class="n">purple</span> <span class="o">=</span> <span class="n">red</span> <span class="o">+</span> <span class="n">blue</span>
+
+<span class="c1"># Scale brightness</span>
+<span class="n">darker</span> <span class="o">=</span> <span class="n">red</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="n">lighter</span> <span class="o">=</span> <span class="n">blue</span> <span class="o">*</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</section>
+<section id="color-ranges">
+<h2>Color Ranges<a class="headerlink" href="#color-ranges" title="Link to this heading">¶</a></h2>
+<p>You can generate a range of colors between two colors:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate gradient between colors</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">color_range</span><span class="p">(</span><span class="n">painto</span><span class="o">.</span><span class="n">red</span><span class="p">,</span> <span class="n">painto</span><span class="o">.</span><span class="n">blue</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>  <span class="c1"># 10 steps</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">colors</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">console_bg</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">hex</span><span class="p">))</span>
+</pre></div>
+</div>
+<img alt="_images/red_to_blue_range.png" src="_images/red_to_blue_range.png" style="width: 63.5px; height: 191.5px;" />
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Inclusive range (includes end color)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">painto</span><span class="o">.</span><span class="n">color_range</span><span class="p">(</span><span class="n">painto</span><span class="o">.</span><span class="n">red</span><span class="p">,</span> <span class="n">painto</span><span class="o">.</span><span class="n">blue</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For more detailed usage and examples, see the full <a class="reference internal" href="usage.html#usageguide"><span class="std std-ref">Usage Guide</span></a> section.</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Quick Start</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#basic-usage">Basic Usage</a></li>
+<li><a class="reference internal" href="#choosing-colors">Choosing Colors</a></li>
+<li><a class="reference internal" href="#random-colors">Random Colors</a></li>
+<li><a class="reference internal" href="#console-usage">Console Usage</a></li>
+<li><a class="reference internal" href="#color-properties">Color Properties</a></li>
+<li><a class="reference internal" href="#color-operations">Color Operations</a></li>
+<li><a class="reference internal" href="#color-ranges">Color Ranges</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter"><strong>🎨painto</strong> documentation</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="usage.html"
+                          title="next chapter">Usage Guide</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/quickstart.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Usage Guide"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="🎨painto documentation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">painto 0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Quick Start</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025, Michael Knowles.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

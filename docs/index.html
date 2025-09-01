@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>🎨painto documentation &#8212; painto 0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css?v=279e0f84" />
+    <script src="_static/documentation_options.js?v=b489f392"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="_static/hexagon_rainbow.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quick Start" href="quickstart.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="quickstart.html" title="Quick Start"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">painto 0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><strong>🎨painto</strong> documentation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="painto-documentation">
+<span id="index"></span><h1><strong>🎨painto</strong> documentation<a class="headerlink" href="#painto-documentation" title="Link to this heading">¶</a></h1>
+<img alt="_images/hexagon_rainbow.png" class="align-left" src="_images/hexagon_rainbow.png" style="width: 100px;" />
+<p>A flexible color library for Python with support for multiple color formats,
+operations, conversion, and more. Use as a drop-in addition to pillow, pygame,
+and more, giving you more options and control with your colors.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(.venv)</span> <span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>painto
+</pre></div>
+</div>
+<p>Then open up a python script and try something out like:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">painto</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">painto</span><span class="o">.</span><span class="n">red</span><span class="p">)</span>  <span class="c1"># prints &#39;red&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">painto</span><span class="o">.</span><span class="n">red</span><span class="o">.</span><span class="n">hex</span><span class="p">)</span>  <span class="c1"># prints &#39;#FF0000&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">painto</span><span class="o">.</span><span class="n">red</span><span class="o">.</span><span class="n">console</span><span class="p">(</span><span class="s2">&quot;Red text&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<pre><font color="red">Red text</font></pre><div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">print(painto.random_color())</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">#9313C0</span></code> <img alt="9313C0" src="_images/9313C0.png" /></p>
+</section>
+<section id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">¶</a></h2>
+<section id="quick-start">
+<h3>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading">¶</a></h3>
+<p>A relatively quick read of the basics of what <strong>🎨painto</strong> can do.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#basic-usage">Basic Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#choosing-colors">Choosing Colors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#random-colors">Random Colors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#console-usage">Console Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#color-properties">Color Properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#color-operations">Color Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#color-ranges">Color Ranges</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="usage-guide">
+<h3>Usage Guide<a class="headerlink" href="#usage-guide" title="Link to this heading">¶</a></h3>
+<p>For a more in-depth look at how to use <strong>🎨painto</strong>, check out the usage guide which
+covers all of the features of the library with examples.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#using-colors">Using Colors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#color-properties">Color Properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#changing-colors-mix-match-and-tweak">Changing Colors: Mix, Match, and Tweak!</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#the-terminal">The Terminal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#colors-with-other-libraries">Colors with other libraries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#new-color-names">New Color Names</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#working-with-lists-of-colors">Working With Lists of colors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#sorting-colors">Sorting Colors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#making-your-own-lists-of-colors">Making Your Own Lists of Colors</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="api-reference">
+<h3>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">¶</a></h3>
+<p>A reference for the classes and functions in the painto library for a
+deeper look at how to use the library.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#painto.color.Color"><code class="docutils literal notranslate"><span class="pre">Color</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#painto.color.Color.rgba"><code class="docutils literal notranslate"><span class="pre">Color.rgba</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#painto.color.Color.rgb"><code class="docutils literal notranslate"><span class="pre">Color.rgb</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#painto.color.Color.r"><code class="docutils literal notranslate"><span class="pre">Color.r</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#painto.color.Color.g"><code class="docutils literal notranslate"><span class="pre">Color.g</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#painto.color.Color.b"><code class="docutils literal notranslate"><span class="pre">Color.b</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#painto.color.Color.a"><code class="docutils literal notranslate"><span class="pre">Color.a</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#painto.color.Color.hex"><code class="docutils literal notranslate"><span class="pre">Color.hex</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#painto.color.Color.name"><code class="docutils literal notranslate"><span class="pre">Color.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#painto.color.Color.web"><code class="docutils literal notranslate"><span class="pre">Color.web</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#painto.color.Color.foreground"><code class="docutils literal notranslate"><span class="pre">Color.foreground</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#painto.color.Color.ansi_escape"><code class="docutils literal notranslate"><span class="pre">Color.ansi_escape</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#painto.color.Color.ansi_escape_bg"><code class="docutils literal notranslate"><span class="pre">Color.ansi_escape_bg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#painto.color.Color.ansi_reset"><code class="docutils literal notranslate"><span class="pre">Color.ansi_reset</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#painto.color.Color.console"><code class="docutils literal notranslate"><span class="pre">Color.console()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#painto.color.Color.console_bg"><code class="docutils literal notranslate"><span class="pre">Color.console_bg()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#painto.color.name_lookup"><code class="docutils literal notranslate"><span class="pre">name_lookup()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#painto.color.random_color"><code class="docutils literal notranslate"><span class="pre">random_color()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#painto.color.sort_by_hue"><code class="docutils literal notranslate"><span class="pre">sort_by_hue()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#painto.color.sort_by_luminosity"><code class="docutils literal notranslate"><span class="pre">sort_by_luminosity()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#painto.color.sorting_by"><code class="docutils literal notranslate"><span class="pre">sorting_by()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#painto.color.disable_dynamic_name_lookup"><code class="docutils literal notranslate"><span class="pre">disable_dynamic_name_lookup()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#painto.color.enable_dynamic_name_lookup"><code class="docutils literal notranslate"><span class="pre">enable_dynamic_name_lookup()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#painto.color.dynamic_name_lookup_enabled"><code class="docutils literal notranslate"><span class="pre">dynamic_name_lookup_enabled()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#painto.color_list.ColorList"><code class="docutils literal notranslate"><span class="pre">ColorList</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#painto.color_list.ColorList.random"><code class="docutils literal notranslate"><span class="pre">ColorList.random()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#painto.color_list.painto.transparent"><code class="docutils literal notranslate"><span class="pre">painto.transparent</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#painto.color_list.painto.rainbow"><code class="docutils literal notranslate"><span class="pre">painto.rainbow</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#painto.color_list.painto.pride"><code class="docutils literal notranslate"><span class="pre">painto.pride</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#painto.color_list.painto.w3c"><code class="docutils literal notranslate"><span class="pre">painto.w3c</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#painto.color_list.painto.xkcd"><code class="docutils literal notranslate"><span class="pre">painto.xkcd</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="#">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><strong>🎨painto</strong> documentation</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#documentation">Documentation</a><ul>
+<li><a class="reference internal" href="#quick-start">Quick Start</a></li>
+<li><a class="reference internal" href="#usage-guide">Usage Guide</a></li>
+<li><a class="reference internal" href="#api-reference">API Reference</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="quickstart.html"
+                          title="next chapter">Quick Start</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="quickstart.html" title="Quick Start"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">painto 0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><strong>🎨painto</strong> documentation</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025, Michael Knowles.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>
